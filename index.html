@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un Solo Pueblo - Menú de Aplicaciones</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Bebas Neue (Título principal), Dancing Script (Subtítulo cursiva), Inter (Textos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --color-rojo-profundo: #5c181d;
+            --color-dorado: #c7a15c;
+            --color-azul-insignia: #1f3a5f;
+        }
+
+        body {
+            /* Color base oscuro rojizo/marrón inspirado en la túnica de la imagen */
+            background-color: #2a1112;
+            
+            /* Gradientes para simular la iluminación de la imagen (luz desde la derecha) */
+            background-image: 
+                radial-gradient(circle at 85% 60%, rgba(199, 116, 52, 0.35) 0%, transparent 55%),
+                radial-gradient(circle at 10% 20%, rgba(92, 24, 29, 0.8) 0%, transparent 60%),
+                radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+            
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Textura de ruido tipo lienzo/papel antiguo superpuesta */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+        }
+
+        /* Utilidades tipográficas */
+        .font-titulo {
+            font-family: 'Bebas Neue', sans-serif;
+            line-height: 0.9;
+            letter-spacing: 0.02em;
+            text-shadow: 2px 4px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .font-cursiva {
+            font-family: 'Dancing Script', cursive;
+            text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .insignia {
+            background-color: var(--color-azul-insignia);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .app-card {
+            background: rgba(20, 10, 10, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(199, 161, 92, 0.3); /* Borde dorado tenue */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-25deg);
+            transition: all 0.7s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-dorado);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(199, 161, 92, 0.3);
+        }
+
+        .app-card:hover::before {
+            left: 200%;
+        }
+
+        .icon-wrapper {
+            background: linear-gradient(135deg, #c7a15c, #8b6d3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-600 selection:text-white">
+
+    <!-- Elementos decorativos (simulando polvo/luz) -->
+    <div class="fixed top-20 right-20 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none z-0"></div>
+    <div class="fixed bottom-20 left-10 w-48 h-48 bg-red-900/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+    <header class="pt-16 md:pt-24 pb-12 px-4 text-center z-10 relative flex flex-col items-center">
+        
+        <!-- Insignia superior -->
+        <div class="insignia inline-flex items-center text-white text-xs md:text-sm font-bold px-5 py-2 rounded-full uppercase tracking-[0.2em] mb-8">
+            Comunidad LOT Te Invita:
+        </div>
+        
+        <!-- Título Principal -->
+        <h1 class="font-titulo text-7xl md:text-8xl lg:text-[10rem] text-white mb-2">
+            UN SOLO<br>PUEBLO
+        </h1>
+        
+        <!-- Subtítulo en cursiva -->
+        <p class="font-cursiva text-3xl md:text-4xl lg:text-5xl text-white mt-2 mb-4">
+            Un solo cuerpo, Una sola Iglesia
+        </p>
+
+        <!-- Elemento de fecha (Adaptado de la imagen) -->
+        <div class="mt-8 flex items-center justify-center gap-3 text-white/80 border-t border-white/20 pt-6 w-full max-w-xs mx-auto">
+            <span class="font-titulo text-5xl text-white leading-none">3</span>
+            <div class="flex flex-col text-left leading-tight font-bold uppercase tracking-wider text-sm">
+                <span>Aplicaciones</span>
+                <span class="text-[#c7a15c]">Interactivas</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow px-4 pb-20 z-10 relative flex items-center justify-center">
+        <div class="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            
+            <!-- APP 1: Jerarquía de la Iglesia Mapa (D3.js) -->
+            <!-- NOTA: Asegúrate de que el archivo se llame 'mapa.html' o cambia el href aquí -->
+            <a href="app1.html" target="_blank" class="app-card rounded-xl p-8 flex flex-col group outline-none focus:ring-2 focus:ring-[#c7a15c]">
+                <div class="mb-6 flex justify-between items-start">
+                    <i class="fas fa-project-diagram text-4xl icon-wrapper group-hover:scale-110 transition-transform duration-300"></i>
+                    <span class="text-xs font-bold text-white/40 uppercase tracking-wider">App 1</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-3 font-serif">Mapa Jerárquico</h2>
+                <p class="text-white/60 mb-8 flex-grow text-sm leading-relaxed">
+                    Explora la estructura territorial y la vida consagrada de la Iglesia a través de un mapa de nodos interactivo y dinámico.
+                </p>
+                <div class="flex items-center text-[#c7a15c] font-semibold text-sm tracking-wide uppercase group-hover:text-amber-300 transition-colors">
+                    Explorar Mapa <i class="fas fa-chevron-right ml-2 text-xs transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+            <!-- APP 2: Jerarquía de la Iglesia (Teoría/Estática) -->
+            <!-- NOTA: Asegúrate de que el archivo se llame 'jerarquia.html' o cambia el href aquí -->
+            <a href="app2.html" target="_blank" class="app-card rounded-xl p-8 flex flex-col group outline-none focus:ring-2 focus:ring-[#c7a15c]">
+                <div class="mb-6 flex justify-between items-start">
+                    <i class="fas fa-landmark text-4xl icon-wrapper group-hover:scale-110 transition-transform duration-300"></i>
+                    <span class="text-xs font-bold text-white/40 uppercase tracking-wider">App 2</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-3 font-serif">Organización</h2>
+                <p class="text-white/60 mb-8 flex-grow text-sm leading-relaxed">
+                    Documento detallado sobre el gobierno, las jurisdicciones, los grados del orden sagrado y las iglesias orientales.
+                </p>
+                <div class="flex items-center text-[#c7a15c] font-semibold text-sm tracking-wide uppercase group-hover:text-amber-300 transition-colors">
+                    Leer Documento <i class="fas fa-chevron-right ml-2 text-xs transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+            <!-- APP 3: Cisma Lefebristas 2026 -->
+            <!-- NOTA: Asegúrate de que el archivo se llame 'cisma.html' o cambia el href aquí -->
+            <a href="app3.html" target="_blank" class="app-card rounded-xl p-8 flex flex-col group outline-none focus:ring-2 focus:ring-[#c7a15c]">
+                <div class="mb-6 flex justify-between items-start">
+                    <i class="fas fa-gavel text-4xl icon-wrapper group-hover:scale-110 transition-transform duration-300"></i>
+                    <span class="text-xs font-bold text-white/40 uppercase tracking-wider">App 3</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-3 font-serif">Cisma FSSPX 2026</h2>
+                <p class="text-white/60 mb-8 flex-grow text-sm leading-relaxed">
+                    Análisis canónico y teológico sobre la ruptura con Roma tras las consagraciones episcopales ilícitas.
+                </p>
+                <div class="flex items-center text-[#c7a15c] font-semibold text-sm tracking-wide uppercase group-hover:text-amber-300 transition-colors">
+                    Ver Análisis <i class="fas fa-chevron-right ml-2 text-xs transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <footer class="py-8 text-center text-white/30 text-xs tracking-widest uppercase z-10 border-t border-white/5">
+        <p>Comunidad LOT &copy; 2026 · Un solo cuerpo, una sola Iglesia</p>
+    </footer>
+
+</body>
+</html>

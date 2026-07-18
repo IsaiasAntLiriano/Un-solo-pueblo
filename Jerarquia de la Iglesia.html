@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jerarquía de la Iglesia Católica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#F1E9D6;
+    --parchment-card:#F8F2E3;
+    --ink:#2A2018;
+    --ink-soft:#5B4E3F;
+    --burgundy:#6E1F2E;
+    --burgundy-deep:#4C1420;
+    --gold:#B8863B;
+    --gold-light:#D9B978;
+    --sage:#4C5B3F;
+    --sage-deep:#37432D;
+    --line-gold:#C7A15C;
+    --line-sage:#8FA37A;
+    --indigo:#3B4C68;
+    --indigo-deep:#28374C;
+    --line-indigo:#8496AE;
+    --indigo-light:#B9C4D4;
+    --shadow: 0 1px 0 rgba(42,32,24,0.06), 0 6px 16px rgba(42,32,24,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at top left, rgba(184,134,59,0.10), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(76,91,63,0.08), transparent 55%),
+      var(--parchment);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* subtle paper texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(42,32,24,0.015) 0px, rgba(42,32,24,0.015) 1px, transparent 1px, transparent 3px);
+    z-index:0;
+  }
+
+  header{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding:52px 24px 28px;
+    border-bottom:1px solid rgba(184,134,59,0.35);
+  }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:clamp(34px,5vw,58px);
+    margin:0 0 10px;
+    color:var(--burgundy-deep);
+    letter-spacing:.01em;
+  }
+  header p.sub{
+    max-width:640px;
+    margin:0 auto;
+    color:var(--ink-soft);
+    font-size:17px;
+    font-style:italic;
+    line-height:1.5;
+  }
+
+  /* ornamental divider */
+  .ornament{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    margin:20px auto 0; width:min(360px,80%);
+  }
+  .ornament .bar{ flex:1; height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent);}
+  .ornament svg{ width:20px; height:20px; color:var(--gold); flex-shrink:0;}
+
+  nav.tabs{
+    position:sticky; top:0; z-index:20;
+    display:flex; justify-content:center; flex-wrap:wrap; gap:6px;
+    padding:14px 16px;
+    background:rgba(241,233,214,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(184,134,59,0.3);
+  }
+  nav.tabs button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:10px 16px;
+    border-radius:3px;
+    border:1px solid rgba(110,31,46,0.25);
+    background:transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all .18s ease;
+  }
+  nav.tabs button:hover{ border-color:var(--burgundy); color:var(--burgundy);}
+  nav.tabs button.active{
+    background:var(--burgundy);
+    border-color:var(--burgundy);
+    color:var(--parchment-card);
+  }
+  nav.tabs button.active.sage{ background:var(--sage); border-color:var(--sage);}
+  nav.tabs button.active.indigo{ background:var(--indigo); border-color:var(--indigo);}
+
+  main{ position:relative; z-index:1; padding:36px 16px 90px; }
+  section.panel{ display:none; max-width:1400px; margin:0 auto; }
+  section.panel.active{ display:block; animation:fadein .35s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel-intro{
+    max-width:760px; margin:0 auto 30px; text-align:center;
+  }
+  .panel-intro h2{
+    font-family:'Cormorant Garamond', serif;
+    font-size:28px; color:var(--burgundy-deep); margin:0 0 8px;
+  }
+  .panel-intro.sage h2{ color:var(--sage-deep); }
+  .panel-intro.indigo h2{ color:var(--indigo-deep); }
+  .panel-intro p{ color:var(--ink-soft); font-size:15.5px; line-height:1.55; margin:0;}
+
+  .legend{
+    display:flex; flex-wrap:wrap; gap:10px 22px; justify-content:center;
+    margin:18px auto 34px; max-width:900px;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-soft);
+  }
+  .legend span{ display:inline-flex; align-items:center; gap:7px; }
+  .legend .dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+
+  .scroller{ overflow-x:auto; padding:10px 6px 30px; }
+  .scroller::-webkit-scrollbar{ height:10px; }
+  .scroller::-webkit-scrollbar-thumb{ background:var(--gold-light); border-radius:6px; }
+  .scroller::-webkit-scrollbar-track{ background:transparent; }
+
+  /* ---- ORG CHART (CSS tree with connectors) ---- */
+  .tree, .tree ul{
+    display:flex; justify-content:center;
+    list-style:none; margin:0; padding:0;
+  }
+  .tree{ padding:0 20px; min-width:max-content; }
+  .tree ul{ padding-top:34px; position:relative; }
+
+  .tree li{
+    position:relative;
+    display:flex; flex-direction:column; align-items:center;
+    padding:0 14px; text-align:center;
+  }
+
+  /* vertical connector above each node (except root) */
+  .tree li::before{
+    content:"";
+    position:absolute; top:-34px; left:50%;
+    width:1px; height:34px;
+    background:var(--conn-color, var(--line-gold));
+    transform:translateX(-50%);
+  }
+  .tree > li::before{ display:none; }
+
+  /* horizontal connector joining siblings, drawn on the ul */
+  .tree ul::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:1px;
+  }
+  .tree ul{ position:relative; }
+  .tree ul.has-siblings::after{
+    content:"";
+    position:absolute; top:0;
+    height:1px; background:var(--conn-color, var(--line-gold));
+  }
+
+  /* simpler robust connector approach using per-li pseudo lines */
+  .tree li:not(:only-child)::after{
+    content:"";
+    position:absolute; top:-34px; height:1px;
+    background:var(--conn-color, var(--line-gold));
+  }
+  .tree li:first-child:not(:only-child)::after{ left:50%; right:0; }
+  .tree li:last-child:not(:only-child)::after{ left:0; right:50%; }
+  .tree li:not(:first-child):not(:last-child):not(:only-child)::after{ left:0; right:0; }
+
+  .node{
+    background:var(--parchment-card);
+    border:1px solid rgba(110,31,46,0.28);
+    border-radius:3px;
+    padding:12px 15px 11px;
+    min-width:150px; max-width:210px;
+    box-shadow:var(--shadow);
+    position:relative;
+    cursor:default;
+  }
+  .node.branch-sage{ border-color:rgba(76,91,63,0.32); }
+  .node.branch-indigo{ border-color:rgba(59,76,104,0.32); }
+
+  .node .icon-badge{
+    width:30px; height:30px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 8px;
+    background:linear-gradient(180deg, var(--gold-light), var(--gold));
+    color:var(--burgundy-deep);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+  }
+  .node.branch-sage .icon-badge{
+    background:linear-gradient(180deg, #B7C6A6, var(--sage));
+    color:var(--sage-deep);
+  }
+  .node.branch-indigo .icon-badge{
+    background:linear-gradient(180deg, var(--indigo-light), var(--indigo));
+    color:var(--indigo-deep);
+  }
+  .node .icon-badge svg{ width:16px; height:16px; }
+
+  .node .title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700; font-size:15.5px; line-height:1.2;
+    color:var(--burgundy-deep);
+  }
+  .node.branch-sage .title{ color:var(--sage-deep); }
+  .node.branch-indigo .title{ color:var(--indigo-deep); }
+
+  .node .desc{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.6px; letter-spacing:.02em;
+    color:var(--ink-soft);
+    margin-top:5px; line-height:1.4;
+  }
+
+  .node .toggle{
+    position:absolute; bottom:-11px; left:50%; transform:translateX(-50%);
+    width:22px; height:22px; border-radius:50%;
+    background:var(--burgundy); color:var(--parchment-card);
+    border:2px solid var(--parchment);
+    font-size:12px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    user-select:none;
+  }
+  .node.branch-sage .toggle{ background:var(--sage); }
+  .node.branch-indigo .toggle{ background:var(--indigo); }
+  .node .toggle:hover{ filter:brightness(1.1); }
+
+  li.collapsed > ul{ display:none; }
+  li.collapsed > .node .toggle::before{ content:"+"; }
+  li:not(.collapsed) > .node .toggle::before{ content:"−"; }
+  li:not(.has-children) > .node .toggle{ display:none; }
+
+  .badges-row{ display:flex; gap:4px; justify-content:center; margin-top:7px; flex-wrap:wrap; }
+  .badge-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:8.6px;
+    padding:2px 5px; border-radius:2px;
+    background:rgba(110,31,46,0.08); color:var(--burgundy-deep);
+    letter-spacing:.03em; text-transform:uppercase;
+  }
+  .node.branch-sage .badge-tag{ background:rgba(76,91,63,0.1); color:var(--sage-deep); }
+  .node.branch-indigo .badge-tag{ background:rgba(59,76,104,0.1); color:var(--indigo-deep); }
+
+  /* Degrees strip (Orden Sacerdotal) */
+  .degrees{
+    display:flex; flex-wrap:wrap; gap:26px; justify-content:center; align-items:stretch;
+    max-width:1000px; margin:0 auto;
+  }
+  .degree-card{
+    background:var(--parchment-card);
+    border:1px solid rgba(110,31,46,0.28);
+    border-radius:4px;
+    width:270px; padding:26px 20px;
+    text-align:center;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .degree-card .rank{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--gold);
+    letter-spacing:.18em; text-transform:uppercase; margin-bottom:10px;
+  }
+  .degree-card .icon-badge{ width:46px; height:46px; margin:0 auto 14px; }
+  .degree-card .icon-badge svg{ width:24px; height:24px; }
+  .degree-card h3{
+    font-family:'Cormorant Garamond', serif; font-size:22px; margin:0 0 8px; color:var(--burgundy-deep);
+  }
+  .degree-card p{ font-size:14px; color:var(--ink-soft); line-height:1.5; margin:0 0 12px;}
+  .degree-card ul{ text-align:left; margin:0; padding-left:18px; font-size:12.6px; color:var(--ink-soft); line-height:1.65;}
+  .degree-arrow{ display:flex; align-items:center; color:var(--gold); }
+  .degree-arrow svg{ width:26px; height:26px; }
+
+  /* Temples/dignities grid */
+  .dignity-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px; max-width:1100px; margin:0 auto;
+  }
+  .dignity-card{
+    background:var(--parchment-card);
+    border:1px solid rgba(184,134,59,0.35);
+    border-radius:4px; padding:20px 18px;
+    box-shadow:var(--shadow);
+  }
+  .dignity-card .icon-badge{ width:38px; height:38px; margin-bottom:12px; background:linear-gradient(180deg,var(--gold-light),var(--gold)); }
+  .dignity-card .icon-badge svg{ width:19px; height:19px; }
+  .dignity-card h3{ font-family:'Cormorant Garamond', serif; font-size:19px; margin:0 0 6px; color:var(--burgundy-deep); }
+  .dignity-card p{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin:0; }
+  .dignity-card .rank-tag{
+    display:inline-block; margin-top:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.05em;
+    color:var(--gold); text-transform:uppercase;
+  }
+  .dignity-card.indigo{ border-color:rgba(59,76,104,0.35); }
+  .dignity-card.indigo h3{ color:var(--indigo-deep); }
+  .dignity-card.indigo .icon-badge{ background:linear-gradient(180deg,var(--indigo-light),var(--indigo)); color:var(--indigo-deep); }
+  .dignity-card.indigo .rank-tag{ color:var(--indigo); }
+  .degree-card.indigo{ border-color:rgba(59,76,104,0.35); }
+  .degree-card.indigo h3{ color:var(--indigo-deep); }
+  .degree-card.indigo .rank{ color:var(--indigo); }
+  .degree-card.indigo .icon-badge{ background:linear-gradient(180deg,var(--indigo-light),var(--indigo)); color:var(--indigo-deep); }
+  .degree-arrow.indigo{ color:var(--indigo); }
+
+  footer{
+    text-align:center; padding:30px 20px 50px;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    color:var(--ink-soft); letter-spacing:.03em;
+    border-top:1px solid rgba(184,134,59,0.25);
+  }
+
+  @media (max-width:640px){
+    .node{ min-width:118px; padding:9px 8px 9px; }
+    .node .title{ font-size:12.8px; }
+    .tree li{ padding:0 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ ICON LIBRARY (shared line-art style, stroke=currentColor) ============ -->
+<svg style="display:none">
+  <defs>
+    <!-- Papa: tiara de tres coronas + cruz -->
+    <symbol id="ic-papa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 15c1.5-3 2-6 2-8 2 1.5 4 1.5 6 0 2 1.5 4 1.5 6 0 0 2 .5 5 2 8"/>
+      <path d="M4 15c2.5 1.4 5.2 2 8 2s5.5-.6 8-2"/>
+      <path d="M12 3v3M10.5 4.5h3"/>
+      <circle cx="7" cy="10.5" r=".6" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="10" r=".6" fill="currentColor" stroke="none"/>
+      <circle cx="17" cy="10.5" r=".6" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- Cardenal: galero con borlas -->
+    <symbol id="ic-cardenal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4c-3 0-5 3-5 6h10c0-3-2-6-5-6z"/>
+      <path d="M4 10c1-1 3-1.5 3.5-.3M20 10c-1-1-3-1.5-3.5-.3"/>
+      <path d="M5 18l1.5-6M19 18l-1.5-6"/>
+      <circle cx="5" cy="19" r="1"/>
+      <circle cx="19" cy="19" r="1"/>
+    </symbol>
+    <!-- Patriarca: cruz patriarcal (doble travesano) -->
+    <symbol id="ic-patriarca" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v18"/>
+      <path d="M8.5 8h7M9.5 12h5"/>
+    </symbol>
+    <!-- Obispo/Arzobispo: mitra -->
+    <symbol id="ic-mitra" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 16c1-5 2.5-9 6-12 3.5 3 5 7 6 12"/>
+      <path d="M6 16c2 1.3 4 2 6 2s4-.7 6-2"/>
+      <path d="M11.3 6.2l1.4 1.4M12.7 6.2l-1.4 1.4"/>
+    </symbol>
+    <!-- Presbitero: casulla / cruz simple -->
+    <symbol id="ic-presbitero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 4l3 2 3-2 1 5-2 1v9a1 1 0 01-1 1h-2a1 1 0 01-1-1v-9L8 9z"/>
+    </symbol>
+    <!-- Diacono: estola cruzada -->
+    <symbol id="ic-diacono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 5c2 4 2 10 0 14M18 5c-2 4-2 10 0 14"/>
+      <path d="M6 5c4 1 8 1 12 0M6 19c4-1 8-1 12 0"/>
+    </symbol>
+    <!-- Provincia eclesiastica: mapa plegado -->
+    <symbol id="ic-provincia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 6l5-2 6 2 5-2v14l-5 2-6-2-5 2z"/>
+      <path d="M9 4v14M15 6v14"/>
+    </symbol>
+    <!-- Diocesis/Arquidiocesis: escudo -->
+    <symbol id="ic-escudo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/>
+      <path d="M12 7v10M9 12h6"/>
+    </symbol>
+    <!-- Parroquia: iglesia sencilla -->
+    <symbol id="ic-parroquia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l5 4v1H7V7z"/>
+      <path d="M12 2v2.4"/>
+      <rect x="5" y="8" width="14" height="12" rx=".5"/>
+      <path d="M10 20v-5h4v5"/>
+    </symbol>
+    <!-- Capilla: iglesia pequeña simple -->
+    <symbol id="ic-capilla" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4l4 3.5v1H8v-1z"/>
+      <rect x="7" y="8.5" width="10" height="10" rx=".5"/>
+      <path d="M10.7 18.5v-3.6h2.6v3.6"/>
+    </symbol>
+    <!-- Catedral: iglesia con dos torres -->
+    <symbol id="ic-catedral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 9l1.5-3 1.5 3M17 9l1.5-3 1.5 3"/>
+      <rect x="4" y="9" width="3" height="10"/>
+      <rect x="17" y="9" width="3" height="10"/>
+      <path d="M9 8l3-3 3 3v1H9z"/>
+      <rect x="8.5" y="9" width="7" height="10"/>
+      <path d="M10.5 19v-4h3v4"/>
+    </symbol>
+    <!-- Basilica: iglesia con umbraculo y campanilla -->
+    <symbol id="ic-basilica" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 7l3-3.2L15 7v1H9z"/>
+      <rect x="7" y="8" width="10" height="11"/>
+      <path d="M11 19v-4h2v4"/>
+      <path d="M5 19c0-3 1.2-5 2-5.4M5 19h2.2"/>
+      <circle cx="18.3" cy="15.5" r="1.4"/>
+      <path d="M18.3 17v2"/>
+    </symbol>
+    <!-- Santuario: estrella radiante -->
+    <symbol id="ic-santuario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/>
+      <circle cx="12" cy="12" r="3"/>
+    </symbol>
+    <!-- Monasterio/Orden religiosa: edificio con cruz -->
+    <symbol id="ic-monasterio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.5v2.6M10.8 4h2.4"/>
+      <path d="M5 9l7-4 7 4v10H5z"/>
+      <path d="M9 19v-4h2.2M13 15h2v4"/>
+      <path d="M9 9h1.2M13.8 9H15"/>
+    </symbol>
+    <!-- Congregacion: dos figuras / comunidad -->
+    <symbol id="ic-congregacion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="8" r="2.2"/>
+      <circle cx="16" cy="9" r="1.9"/>
+      <path d="M4.5 19c.3-3.4 2.2-5.4 4.5-5.4s4.2 2 4.5 5.4"/>
+      <path d="M13.5 19c.2-2.6 1.6-4.3 3.3-4.3s3 1.5 3.3 3.9"/>
+    </symbol>
+    <!-- Instituto secular: figura sola en el mundo -->
+    <symbol id="ic-instituto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="7.5" r="2.6"/>
+      <path d="M6 19.5c.4-4.2 2.7-6.7 6-6.7s5.6 2.5 6 6.7"/>
+      <circle cx="12" cy="19" r="7.2" stroke-dasharray="1.2 2.6"/>
+    </symbol>
+    <!-- Sociedad de vida apostolica: figuras con maletin (mision) -->
+    <symbol id="ic-sociedad" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="7.5" r="2.1"/>
+      <circle cx="16" cy="8.3" r="1.8"/>
+      <path d="M4.8 18.5c.3-3.2 2-5 4.2-5s3.9 1.8 4.2 5"/>
+      <path d="M13.6 18.5c.2-2.4 1.5-4 3.1-4s2.8 1.4 3.1 3.7"/>
+      <rect x="7.8" y="13.6" width="2.4" height="1.7" rx=".3"/>
+    </symbol>
+    <!-- Superior/gobierno de instituto: baculo -->
+    <symbol id="ic-baculo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4c-2 0-3.2 1.4-3.2 2.8 0 1.6 1.4 2.6 3.2 2.6"/>
+      <path d="M12 4v17"/>
+    </symbol>
+    <!-- Casa local -->
+    <symbol id="ic-casa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 11l8-6.5L20 11"/>
+      <path d="M6 10v9h12v-9"/>
+      <path d="M10.3 19v-4.5h3.4V19"/>
+    </symbol>
+    <!-- Curia: llaves cruzadas -->
+    <symbol id="ic-curia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="7" cy="8" r="2.2"/>
+      <path d="M8.6 9.6L18 19M15.4 16.4l2-2M17 18l2-2"/>
+      <circle cx="17" cy="8" r="2.2"/>
+      <path d="M15.4 9.6L6 19M8.6 16.4l-2-2M7 18l-2-2"/>
+    </symbol>
+    <!-- Circunscripcion equivalente (vicariato/prelatura) -->
+    <symbol id="ic-circunscripcion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l7 4v5c0 5-3.2 8-7 9-3.8-1-7-4-7-9V7z" stroke-dasharray="2 2"/>
+      <path d="M12 9v6M9.2 12h5.6"/>
+    </symbol>
+    <!-- Iglesia oriental: cupula bulbosa (bizantina) -->
+    <symbol id="ic-oriental" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 8c0-2.2 1.3-4 3-4s3 1.8 3 4c0 1.4-1.3 2.2-3 2.2S9 9.4 9 8z"/>
+      <path d="M12 2.2v1.6M11 2.6h2"/>
+      <rect x="7" y="10.5" width="10" height="8.5" rx=".5"/>
+      <path d="M10.3 19v-3.6h3.4V19"/>
+    </symbol>
+    <!-- Sinodo / asamblea colegial: circulo de puntos -->
+    <symbol id="ic-sinodo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="7"/>
+      <circle cx="12" cy="6.3" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="17.2" cy="9.5" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="17.2" cy="14.5" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="17.7" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="6.8" cy="14.5" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="6.8" cy="9.5" r="1" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- Conferencia episcopal: escudos agrupados -->
+    <symbol id="ic-conferencia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 4l4 1.7v3.6c0 2.6-1.7 4.3-4 5-2.3-.7-4-2.4-4-5V5.7z" transform="translate(1,1) scale(0.72)"/>
+      <path d="M12 3l5 2.2v4.6c0 3.3-2.2 5.5-5 6.4-2.8-.9-5-3.1-5-6.4V5.2z"/>
+      <path d="M17 4l4 1.7v3.6c0 2.6-1.7 4.3-4 5" transform="translate(-1,1) scale(0.72)"/>
+    </symbol>
+    <!-- Prelatura personal / red no territorial -->
+    <symbol id="ic-prelatura" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="5.5" r="1.6"/>
+      <circle cx="5.5" cy="17" r="1.6"/>
+      <circle cx="18.5" cy="17" r="1.6"/>
+      <circle cx="12" cy="14" r="1.6"/>
+      <path d="M12 7.1v5.3M10.8 15.1L7 15.9M13.2 15.1l3.8.8"/>
+    </symbol>
+    <!-- Ordinariato castrense: estrella con cruz -->
+    <symbol id="ic-castrense" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l1.8 4.6L18 9l-3.6 2.6L15.6 16 12 13.2 8.4 16l1.2-4.4L6 9l4.2-1.4z"/>
+      <path d="M12 16.5v4M10.3 18.7h3.4"/>
+    </symbol>
+    <!-- Dicasterio: documento / pergamino -->
+    <symbol id="ic-dicasterio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 3.5h8l3 3V20a.7.7 0 01-.7.7H7.7A.7.7 0 017 20z"/>
+      <path d="M15 3.5V7h3"/>
+      <path d="M9.3 11h5.4M9.3 14h5.4M9.3 17h3.4"/>
+    </symbol>
+    <!-- Nuncio / diplomacia: globo con orbita -->
+    <symbol id="ic-nuncio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5.5"/>
+      <path d="M6.5 12h11M12 6.5c1.8 1.6 2.8 3.5 2.8 5.5s-1 3.9-2.8 5.5c-1.8-1.6-2.8-3.5-2.8-5.5S10.2 8.1 12 6.5z"/>
+      <ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(-18 12 12)"/>
+    </symbol>
+    <!-- Conclave: chimenea con humo -->
+    <symbol id="ic-conclave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 20V11l4-3h6l4 3v9z"/>
+      <rect x="14.5" y="4" width="3" height="5"/>
+      <path d="M15.3 3.3c.6-1 1.7-1 1.7 0M14.7 1.6c.9-1.4 2.6-1.4 3.5 0"/>
+      <path d="M9 20v-4h6v4"/>
+    </symbol>
+    <!-- Sucesion apostolica: imposicion de manos -->
+    <symbol id="ic-sucesion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="6" r="2.2"/>
+      <path d="M4 13.5c.4-2.8 1.9-4.4 4-4.4s3.6 1.6 4 4.4"/>
+      <path d="M11 9.5l4-2M11.8 12l4.5-1.8"/>
+      <circle cx="17.5" cy="16.5" r="1.3"/>
+    </symbol>
+    <!-- Ministerio laical: libro abierto -->
+    <symbol id="ic-lector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 6.5c-1.6-1.2-3.6-1.7-6-1.5v12c2.4-.2 4.4.3 6 1.5 1.6-1.2 3.6-1.7 6-1.5V5c-2.4-.2-4.4.3-6 1.5z"/>
+      <path d="M12 6.5V19"/>
+    </symbol>
+    <!-- Tercera orden seglar: figura afiliada -->
+    <symbol id="ic-tercerorden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8.3" cy="6.3" r="2.1"/>
+      <path d="M4.3 17.5c.3-3.6 1.9-5.7 4-5.7s3.7 2.1 4 5.7"/>
+      <circle cx="17.5" cy="9" r="1.6"/>
+      <path d="M14.6 17.2c.2-2.6 1.4-4.2 2.9-4.2s2.6 1.5 2.9 4"/>
+      <path d="M11 12.3l3.4-2.4" stroke-dasharray="1.6 1.8"/>
+    </symbol>
+    <!-- Movimiento eclesial: espiral / irradiacion -->
+    <symbol id="ic-movimiento" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="2"/>
+      <circle cx="12" cy="12" r="5.2" stroke-dasharray="2 2.4"/>
+      <circle cx="12" cy="12" r="8.6" stroke-dasharray="1.2 2.6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="kicker">Estructura · Gobierno · Vida consagrada</div>
+  <h1>Jerarquía de la Iglesia Católica</h1>
+  <p class="sub">Un mapa visual de cómo se ordenan el gobierno eclesiástico, los grados del Orden sagrado, la vida consagrada y los templos, de mayor a menor autoridad.</p>
+  <div class="ornament">
+    <span class="bar"></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2v20M4 8h16M6 5h12"/></svg>
+    <span class="bar"></span>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="gobierno">Gobierno Eclesiástico</button>
+  <button class="tab-btn indigo" data-tab="orientales">Iglesias Orientales</button>
+  <button class="tab-btn sage" data-tab="vida">Vida Consagrada</button>
+  <button class="tab-btn sage" data-tab="laicado">Laicado y Movimientos</button>
+  <button class="tab-btn" data-tab="grados">Grados del Orden</button>
+  <button class="tab-btn indigo" data-tab="curia">Curia y Diplomacia</button>
+  <button class="tab-btn indigo" data-tab="jurisdicciones">Jurisdicciones Especiales</button>
+  <button class="tab-btn indigo" data-tab="conclave">Cónclave y Sucesión</button>
+  <button class="tab-btn" data-tab="templos">Templos y Dignidades</button>
+</nav>
+
+<main>
+
+  <!-- ================= PANEL 1: GOBIERNO ECLESIÁSTICO ================= -->
+  <section class="panel active" id="panel-gobierno">
+    <div class="panel-intro">
+      <h2>Gobierno territorial y jurisdiccional</h2>
+      <p>Desde el Papa hasta la capilla local. Toca el círculo bajo cada nodo para expandir o contraer sus dependencias.</p>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--gold)"></i> Autoridad de gobierno</span>
+      <span><i class="dot" style="background:var(--burgundy)"></i> Circunscripción territorial</span>
+    </div>
+
+    <div class="scroller">
+      <ul class="tree" style="--conn-color:var(--line-gold)">
+        <li class="has-children">
+          <div class="node">
+            <div class="icon-badge"><svg><use href="#ic-papa"/></svg></div>
+            <div class="title">El Papa</div>
+            <div class="desc">Obispo de Roma · Sumo Pontífice</div>
+            <div class="toggle"></div>
+          </div>
+          <ul>
+            <li>
+              <div class="node">
+                <div class="icon-badge"><svg><use href="#ic-curia"/></svg></div>
+                <div class="title">Curia Romana</div>
+                <div class="desc">Dicasterios · Secretaría de Estado</div>
+              </div>
+            </li>
+            <li>
+              <div class="node">
+                <div class="icon-badge"><svg><use href="#ic-cardenal"/></svg></div>
+                <div class="title">Colegio Cardenalicio</div>
+                <div class="desc">Dignidad · consejeros y electores</div>
+              </div>
+            </li>
+            <li class="has-children">
+              <div class="node">
+                <div class="icon-badge"><svg><use href="#ic-patriarca"/></svg></div>
+                <div class="title">Patriarcas / Primados</div>
+                <div class="desc">Iglesias orientales y sedes primadas</div>
+                <div class="toggle"></div>
+              </div>
+              <ul>
+                <li class="has-children">
+                  <div class="node">
+                    <div class="icon-badge"><svg><use href="#ic-mitra"/></svg></div>
+                    <div class="title">Arzobispo Metropolitano</div>
+                    <div class="desc">Cabeza de provincia eclesiástica</div>
+                    <div class="toggle"></div>
+                  </div>
+                  <ul>
+                    <li class="has-children">
+                      <div class="node">
+                        <div class="icon-badge"><svg><use href="#ic-provincia"/></svg></div>
+                        <div class="title">Provincia Eclesiástica</div>
+                        <div class="desc">Agrupa una sede metropolitana + sufragáneas</div>
+                        <div class="toggle"></div>
+                      </div>
+                      <ul>
+                        <li>
+                          <div class="node">
+                            <div class="icon-badge"><svg><use href="#ic-escudo"/></svg></div>
+                            <div class="title">Arquidiócesis</div>
+                            <div class="desc">Sede metropolitana</div>
+                            <div class="badges-row"><span class="badge-tag">Catedral</span></div>
+                          </div>
+                        </li>
+                        <li class="has-children">
+                          <div class="node">
+                            <div class="icon-badge"><svg><use href="#ic-escudo"/></svg></div>
+                            <div class="title">Diócesis Sufragánea</div>
+                            <div class="desc">Obispo diocesano</div>
+                            <div class="toggle"></div>
+                          </div>
+                          <ul>
+                            <li>
+                              <div class="node">
+                                <div class="icon-badge"><svg><use href="#ic-mitra"/></svg></div>
+                                <div class="title">Obispo Auxiliar / Vicario General</div>
+                                <div class="desc">Colaboradores del obispo diocesano</div>
+                              </div>
+                            </li>
+                            <li class="has-children">
+                              <div class="node">
+                                <div class="icon-badge"><svg><use href="#ic-provincia"/></svg></div>
+                                <div class="title">Vicaría / Decanato</div>
+                                <div class="desc">Agrupación de parroquias vecinas</div>
+                                <div class="toggle"></div>
+                              </div>
+                              <ul>
+                                <li class="has-children">
+                                  <div class="node">
+                                    <div class="icon-badge"><svg><use href="#ic-parroquia"/></svg></div>
+                                    <div class="title">Parroquia</div>
+                                    <div class="desc">Párroco · comunidad estable</div>
+                                    <div class="toggle"></div>
+                                  </div>
+                                  <ul>
+                                    <li>
+                                      <div class="node">
+                                        <div class="icon-badge"><svg><use href="#ic-capilla"/></svg></div>
+                                        <div class="title">Capilla filial</div>
+                                        <div class="desc">Templo dependiente de la parroquia</div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <div class="node">
+                    <div class="icon-badge"><svg><use href="#ic-circunscripcion"/></svg></div>
+                    <div class="title">Circunscripciones equivalentes</div>
+                    <div class="desc">Prelatura territorial · Vicariato / Exarcado apostólico · Ordinariato</div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel-intro" style="margin-top:56px;">
+      <h2>Gobierno colegial de los obispos</h2>
+      <p>Además del gobierno vertical, los obispos se coordinan horizontalmente. Esto no reemplaza la autoridad de cada obispo en su propia diócesis.</p>
+    </div>
+    <div class="dignity-grid" style="max-width:760px;">
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-sinodo"/></svg></div>
+        <h3>Sínodo de los Obispos</h3>
+        <p>Asamblea mundial de obispos, convocada por el Papa para asesorarlo sobre temas de la Iglesia universal. Es consultivo, no un parlamento con poder propio.</p>
+        <div class="rank-tag">Ámbito mundial · consultivo</div>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-conferencia"/></svg></div>
+        <h3>Conferencia Episcopal</h3>
+        <p>Reúne a los obispos de un país o región para coordinar la pastoral común, sin sustituir el gobierno propio de cada diócesis.</p>
+        <div class="rank-tag">Ámbito nacional / regional</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL: IGLESIAS ORIENTALES CATÓLICAS ================= -->
+  <section class="panel" id="panel-orientales">
+    <div class="panel-intro indigo">
+      <h2>Iglesias Orientales Católicas</h2>
+      <p>Todo lo anterior era de rito latino. Existen 23 Iglesias orientales católicas «sui iuris», en plena comunión con el Papa, pero con su propio derecho, liturgia y forma interna de gobierno.</p>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--indigo)"></i> Gobierno propio de cada Iglesia oriental</span>
+    </div>
+    <div class="scroller">
+      <ul class="tree" style="--conn-color:var(--line-indigo)">
+        <li class="has-children">
+          <div class="node branch-indigo">
+            <div class="icon-badge"><svg><use href="#ic-papa"/></svg></div>
+            <div class="title">El Papa</div>
+            <div class="desc">Comunión y primado universal</div>
+            <div class="toggle"></div>
+          </div>
+          <ul>
+            <li class="has-children">
+              <div class="node branch-indigo">
+                <div class="icon-badge"><svg><use href="#ic-oriental"/></svg></div>
+                <div class="title">Iglesia sui iuris</div>
+                <div class="desc">Bizantina · Alejandrina · Antioquena · Armenia · Caldea</div>
+                <div class="toggle"></div>
+              </div>
+              <ul>
+                <li class="has-children">
+                  <div class="node branch-indigo">
+                    <div class="icon-badge"><svg><use href="#ic-patriarca"/></svg></div>
+                    <div class="title">Patriarca / Arzobispo Mayor / Metropolitano</div>
+                    <div class="desc">Cabeza de la Iglesia oriental, según su rango</div>
+                    <div class="toggle"></div>
+                  </div>
+                  <ul>
+                    <li class="has-children">
+                      <div class="node branch-indigo">
+                        <div class="icon-badge"><svg><use href="#ic-sinodo"/></svg></div>
+                        <div class="title">Sínodo de la Iglesia patriarcal</div>
+                        <div class="desc">Gobierno colegiado propio, con obispos de esa Iglesia</div>
+                        <div class="toggle"></div>
+                      </div>
+                      <ul>
+                        <li class="has-children">
+                          <div class="node branch-indigo">
+                            <div class="icon-badge"><svg><use href="#ic-escudo"/></svg></div>
+                            <div class="title">Eparquía</div>
+                            <div class="desc">Equivale a una diócesis latina · Obispo eparquial</div>
+                            <div class="toggle"></div>
+                          </div>
+                          <ul>
+                            <li>
+                              <div class="node branch-indigo">
+                                <div class="icon-badge"><svg><use href="#ic-parroquia"/></svg></div>
+                                <div class="title">Parroquia</div>
+                                <div class="desc">Párroco de rito oriental</div>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <div class="node branch-indigo">
+                            <div class="icon-badge"><svg><use href="#ic-circunscripcion"/></svg></div>
+                            <div class="title">Exarcado</div>
+                            <div class="desc">Equivale a un vicariato apostólico latino</div>
+                          </div>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="panel-intro indigo" style="margin-top:20px;">
+      <p style="font-size:13.5px;"><strong>Nota de vocabulario:</strong> donde el rito latino dice «diócesis» y «vicariato apostólico», el rito oriental dice «eparquía» y «exarcado». El gobierno de la Iglesia oriental se rige por el Código de Cánones de las Iglesias Orientales, distinto del Código latino.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANEL 2: VIDA CONSAGRADA ================= -->
+  <section class="panel" id="panel-vida">
+    <div class="panel-intro sage">
+      <h2>Vida Consagrada y Sociedades de Vida Apostólica</h2>
+      <p>Una rama paralela al gobierno territorial: religiosos y religiosas que profesan consejos evangélicos, bajo la autoridad suprema del Papa o del obispo diocesano según su derecho.</p>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--sage)"></i> Forma de vida consagrada</span>
+      <span><i class="dot" style="background:var(--gold)"></i> Gobierno interno del instituto</span>
+    </div>
+
+    <div class="scroller">
+      <ul class="tree" style="--conn-color:var(--line-sage)">
+        <li class="has-children">
+          <div class="node branch-sage">
+            <div class="icon-badge"><svg><use href="#ic-monasterio"/></svg></div>
+            <div class="title">Vida Consagrada</div>
+            <div class="desc">Institutos aprobados por la Iglesia</div>
+            <div class="toggle"></div>
+          </div>
+          <ul>
+            <li class="has-children">
+              <div class="node branch-sage">
+                <div class="icon-badge"><svg><use href="#ic-monasterio"/></svg></div>
+                <div class="title">Órdenes Religiosas</div>
+                <div class="desc">Votos solemnes</div>
+                <div class="toggle"></div>
+              </div>
+              <ul>
+                <li>
+                  <div class="node branch-sage">
+                    <div class="title" style="font-size:13.5px">Monásticas</div>
+                    <div class="desc">Benedictinos · Trapenses · Cartujos</div>
+                  </div>
+                </li>
+                <li>
+                  <div class="node branch-sage">
+                    <div class="title" style="font-size:13.5px">Mendicantes</div>
+                    <div class="desc">Franciscanos · Dominicos · Carmelitas · Agustinos</div>
+                  </div>
+                </li>
+                <li>
+                  <div class="node branch-sage">
+                    <div class="title" style="font-size:13.5px">Clérigos Regulares</div>
+                    <div class="desc">Jesuitas · Teatinos</div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li class="has-children">
+              <div class="node branch-sage">
+                <div class="icon-badge"><svg><use href="#ic-congregacion"/></svg></div>
+                <div class="title">Congregaciones Religiosas</div>
+                <div class="desc">Votos simples</div>
+                <div class="toggle"></div>
+              </div>
+              <ul>
+                <li>
+                  <div class="node branch-sage">
+                    <div class="title" style="font-size:13.5px">Clericales</div>
+                    <div class="desc">Con sacerdotes ordenados</div>
+                  </div>
+                </li>
+                <li>
+                  <div class="node branch-sage">
+                    <div class="title" style="font-size:13.5px">Laicales / Femeninas</div>
+                    <div class="desc">Dedicadas a educación, salud, misión</div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <div class="node branch-sage">
+                <div class="icon-badge"><svg><use href="#ic-instituto"/></svg></div>
+                <div class="title">Institutos Seculares</div>
+                <div class="desc">Consejos evangélicos vividos en medio del mundo, sin vida común</div>
+              </div>
+            </li>
+            <li>
+              <div class="node branch-sage">
+                <div class="icon-badge"><svg><use href="#ic-sociedad"/></svg></div>
+                <div class="title">Sociedades de Vida Apostólica</div>
+                <div class="desc">Vida común y fin apostólico, sin votos religiosos</div>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel-intro sage" style="margin-top:56px;">
+      <h2>Gobierno interno de un instituto</h2>
+      <p>Así se organiza internamente una orden o congregación, de la autoridad general a la comunidad local.</p>
+    </div>
+    <div class="scroller">
+      <ul class="tree" style="--conn-color:var(--line-sage)">
+        <li class="has-children">
+          <div class="node branch-sage">
+            <div class="icon-badge"><svg><use href="#ic-baculo"/></svg></div>
+            <div class="title">Superior/a General</div>
+            <div class="desc">Ministro, Abad o Prepósito General</div>
+            <div class="toggle"></div>
+          </div>
+          <ul>
+            <li class="has-children">
+              <div class="node branch-sage">
+                <div class="icon-badge"><svg><use href="#ic-provincia"/></svg></div>
+                <div class="title">Provincia Religiosa</div>
+                <div class="desc">Superior Provincial</div>
+                <div class="toggle"></div>
+              </div>
+              <ul>
+                <li>
+                  <div class="node branch-sage">
+                    <div class="icon-badge"><svg><use href="#ic-casa"/></svg></div>
+                    <div class="title">Casa / Convento / Monasterio</div>
+                    <div class="desc">Superior local · comunidad</div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= PANEL: LAICADO, TERCERAS ÓRDENES Y MOVIMIENTOS ================= -->
+  <section class="panel" id="panel-laicado">
+    <div class="panel-intro sage">
+      <h2>Laicado, terceras órdenes y movimientos</h2>
+      <p>No todo lo que forma parte activa de la Iglesia es clero o vida religiosa. Los fieles laicos participan con ministerios propios, afiliaciones y movimientos de espiritualidad.</p>
+    </div>
+
+    <div class="panel-intro sage" style="margin-top:6px;"><h2 style="font-size:20px;">Ministerios laicales instituidos</h2></div>
+    <div class="dignity-grid">
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-lector"/></svg></div>
+        <h3>Lectorado</h3>
+        <p>Ministerio laical instituido para proclamar la Palabra de Dios en la liturgia.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-presbitero"/></svg></div>
+        <h3>Acolitado</h3>
+        <p>Ministerio laical instituido para el servicio del altar y la asistencia litúrgica.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-congregacion"/></svg></div>
+        <h3>Catequista</h3>
+        <p>Ministerio laical reconocido para la formación en la fe de niños y adultos.</p>
+      </div>
+    </div>
+
+    <div class="panel-intro sage" style="margin-top:44px;"><h2 style="font-size:20px;">Terceras Órdenes Seglares</h2><p>Laicos afiliados a la espiritualidad de una orden religiosa, sin vida en común ni votos religiosos plenos.</p></div>
+    <div class="dignity-grid">
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-tercerorden"/></svg></div>
+        <h3>Orden Franciscana Seglar</h3>
+        <p>Afiliada a la espiritualidad franciscana, viviendo el Evangelio en su vida cotidiana.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-tercerorden"/></svg></div>
+        <h3>Carmelitas Seglares</h3>
+        <p>Laicos vinculados a la espiritualidad y oración del Carmelo.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-tercerorden"/></svg></div>
+        <h3>Laicos Dominicos</h3>
+        <p>Comparten el carisma de predicación y estudio de la Orden de Predicadores.</p>
+      </div>
+    </div>
+
+    <div class="panel-intro sage" style="margin-top:44px;"><h2 style="font-size:20px;">Movimientos eclesiales</h2><p>Realidades de laicos (y a veces clero) con un carisma y forma de espiritualidad propios, reconocidas por la Iglesia pero distintas de una orden religiosa.</p></div>
+    <div class="dignity-grid">
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-movimiento"/></svg></div>
+        <h3>Comunión y Liberación</h3>
+        <p>Movimiento centrado en el encuentro personal con Cristo dentro de la vida cotidiana.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-movimiento"/></svg></div>
+        <h3>Camino Neocatecumenal</h3>
+        <p>Itinerario de formación cristiana que acompaña el redescubrimiento del bautismo.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-movimiento"/></svg></div>
+        <h3>Renovación Carismática</h3>
+        <p>Énfasis en la acción del Espíritu Santo y la oración de alabanza.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-movimiento"/></svg></div>
+        <h3>Focolares</h3>
+        <p>Movimiento centrado en la espiritualidad de comunión y la unidad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL 3: GRADOS DEL ORDEN ================= -->
+  <section class="panel" id="panel-grados">
+    <div class="panel-intro">
+      <h2>Grados del Sacramento del Orden</h2>
+      <p>El Orden sagrado tiene tres grados. El cardenalato, en cambio, es una dignidad y no un grado adicional del sacerdocio.</p>
+    </div>
+    <div class="degrees">
+      <div class="degree-card">
+        <div class="rank">Grado I · plenitud</div>
+        <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-mitra"/></svg></div>
+        <h3>Episcopado</h3>
+        <p>El Obispo recibe la plenitud del sacerdocio: enseña, santifica y gobierna una Iglesia particular.</p>
+        <ul>
+          <li>Papa (Obispo de Roma)</li>
+          <li>Patriarca / Arzobispo</li>
+          <li>Obispo diocesano</li>
+          <li>Obispo auxiliar o titular</li>
+        </ul>
+      </div>
+      <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="degree-card">
+        <div class="rank">Grado II</div>
+        <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-presbitero"/></svg></div>
+        <h3>Presbiterado</h3>
+        <p>El Presbítero (sacerdote) colabora con el obispo: celebra los sacramentos y guía a una comunidad.</p>
+        <ul>
+          <li>Párroco</li>
+          <li>Vicario parroquial</li>
+          <li>Sacerdote religioso</li>
+        </ul>
+      </div>
+      <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="degree-card">
+        <div class="rank">Grado III</div>
+        <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-diacono"/></svg></div>
+        <h3>Diaconado</h3>
+        <p>El Diácono está ordenado para el servicio: la Palabra, el altar y la caridad.</p>
+        <ul>
+          <li>Diácono transitorio (camino al presbiterado)</li>
+          <li>Diácono permanente</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel-intro" style="margin-top:40px;">
+      <p style="font-size:13.5px;"><strong style="color:var(--burgundy-deep)">Nota:</strong> Cardenal es un título honorífico que el Papa otorga a obispos (u ocasionalmente presbíteros), no un cuarto grado del Orden.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANEL: CURIA Y DIPLOMACIA ================= -->
+  <section class="panel" id="panel-curia">
+    <div class="panel-intro indigo">
+      <h2>Curia Romana y diplomacia vaticana</h2>
+      <p>El Papa gobierna la Iglesia universal apoyado en dicasterios (antes «congregaciones») y en una red diplomática que lo representa ante los Estados y ante las Iglesias locales.</p>
+    </div>
+    <div class="dignity-grid">
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-curia"/></svg></div>
+        <h3>Secretaría de Estado</h3>
+        <p>Coordina la actividad de la Curia y la diplomacia de la Santa Sede.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-dicasterio"/></svg></div>
+        <h3>Dicasterio para la Doctrina de la Fe</h3>
+        <p>Custodia la enseñanza católica en fe y moral.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-dicasterio"/></svg></div>
+        <h3>Dicasterio para los Obispos</h3>
+        <p>Interviene en el nombramiento de obispos de rito latino.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-dicasterio"/></svg></div>
+        <h3>Dicasterio para la Evangelización</h3>
+        <p>Impulsa la misión y las Iglesias en territorios de misión.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-dicasterio"/></svg></div>
+        <h3>Dicasterio para el Clero</h3>
+        <p>Asuntos de sacerdotes y diáconos diocesanos.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-monasterio"/></svg></div>
+        <h3>Dicasterio para los Institutos de Vida Consagrada</h3>
+        <p>Supervisa órdenes, congregaciones y sociedades de vida apostólica.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-oriental"/></svg></div>
+        <h3>Dicasterio para las Iglesias Orientales</h3>
+        <p>Atiende los asuntos propios de las Iglesias orientales católicas.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-dicasterio"/></svg></div>
+        <h3>Dicasterio para los Textos Legislativos</h3>
+        <p>Interpreta el derecho canónico de la Iglesia.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-nuncio"/></svg></div>
+        <h3>Nuncio Apostólico</h3>
+        <p>Representante diplomático del Papa ante un Estado y ante la Iglesia de ese país.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL: JURISDICCIONES ESPECIALES ================= -->
+  <section class="panel" id="panel-jurisdicciones">
+    <div class="panel-intro indigo">
+      <h2>Jurisdicciones no territoriales</h2>
+      <p>La regla general es que la autoridad de un obispo se ejerce sobre un territorio. Estas figuras rompen esa lógica: agrupan personas, no un lugar.</p>
+    </div>
+    <div class="dignity-grid">
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-prelatura"/></svg></div>
+        <h3>Prelatura Personal</h3>
+        <p>Agrupa fieles y clero para una labor pastoral específica, sin importar su diócesis de origen. El Opus Dei es el único caso existente hoy.</p>
+        <div class="rank-tag">Se define por la persona, no el lugar</div>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-prelatura"/></svg></div>
+        <h3>Ordinariato Personal</h3>
+        <p>Creado para comunidades de origen anglicano que se incorporan a la Iglesia Católica conservando parte de su tradición litúrgica.</p>
+        <div class="rank-tag">Se define por origen y tradición</div>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-castrense"/></svg></div>
+        <h3>Ordinariato Castrense</h3>
+        <p>Atiende pastoralmente a militares y sus familias, cruzando las fronteras de todas las diócesis.</p>
+        <div class="rank-tag">Se define por la profesión</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL: CÓNCLAVE Y SUCESIÓN ================= -->
+  <section class="panel" id="panel-conclave">
+    <div class="panel-intro indigo">
+      <h2>Cónclave y sucesión apostólica</h2>
+      <p>El fundamento de toda esta jerarquía: los obispos son sucesores de los Apóstoles, y el Papa es elegido, no heredado.</p>
+    </div>
+    <div class="degrees">
+      <div class="degree-card indigo">
+        <div class="rank">Fundamento teológico</div>
+        <div class="icon-badge" style="background:linear-gradient(180deg,var(--indigo-light),var(--indigo))"><svg><use href="#ic-sucesion"/></svg></div>
+        <h3>Sucesión Apostólica</h3>
+        <p>Cada obispo recibe, por la imposición de manos, una cadena ininterrumpida de consagraciones que se remonta a los Apóstoles.</p>
+      </div>
+      <div class="degree-arrow indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="degree-card indigo">
+        <div class="rank">Al morir o renunciar el Papa</div>
+        <div class="icon-badge" style="background:linear-gradient(180deg,var(--indigo-light),var(--indigo))"><svg><use href="#ic-sinodo"/></svg></div>
+        <h3>Sede Vacante</h3>
+        <p>El Colegio Cardenalicio asume el gobierno ordinario de asuntos urgentes, sin poder cambiar la doctrina ni el gobierno de fondo.</p>
+      </div>
+      <div class="degree-arrow indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="degree-card indigo">
+        <div class="rank">Votación</div>
+        <div class="icon-badge" style="background:linear-gradient(180deg,var(--indigo-light),var(--indigo))"><svg><use href="#ic-conclave"/></svg></div>
+        <h3>Cónclave</h3>
+        <p>Los cardenales menores de 80 años se reúnen en clausura y eligen al nuevo Papa por mayoría de dos tercios.</p>
+      </div>
+      <div class="degree-arrow indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+      <div class="degree-card indigo">
+        <div class="rank">Resultado</div>
+        <div class="icon-badge" style="background:linear-gradient(180deg,var(--indigo-light),var(--indigo))"><svg><use href="#ic-papa"/></svg></div>
+        <h3>Habemus Papam</h3>
+        <p>El humo blanco anuncia la elección; el nuevo Papa acepta el cargo y elige su nombre.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL 4: TEMPLOS Y DIGNIDADES ================= -->
+  <section class="panel" id="panel-templos">
+    <div class="panel-intro">
+      <h2>Templos y dignidades de las iglesias</h2>
+      <p>Catedral, basílica y santuario no son niveles de gobierno: son títulos o funciones que se otorgan a un edificio, independientemente de si es parroquia, capilla o sede episcopal.</p>
+    </div>
+    <div class="dignity-grid">
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-catedral"/></svg></div>
+        <h3>Catedral</h3>
+        <p>Iglesia principal de una diócesis; contiene la cátedra (sede) del obispo.</p>
+        <div class="rank-tag">Función · sede episcopal</div>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-basilica"/></svg></div>
+        <h3>Basílica</h3>
+        <p>Título honorífico papal por su antigüedad, arte o valor devocional (mayor o menor).</p>
+        <div class="rank-tag">Título · concedido por Roma</div>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-santuario"/></svg></div>
+        <h3>Santuario</h3>
+        <p>Lugar de peregrinación por una devoción, reliquia o aparición reconocida.</p>
+        <div class="rank-tag">Función · destino de peregrinos</div>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-parroquia"/></svg></div>
+        <h3>Parroquia</h3>
+        <p>Comunidad estable de fieles confiada a un párroco dentro de una diócesis.</p>
+        <div class="rank-tag">Circunscripción territorial mínima</div>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-capilla"/></svg></div>
+        <h3>Capilla</h3>
+        <p>Templo menor, a menudo filial de una parroquia o privado de una institución.</p>
+        <div class="rank-tag">Edificio dependiente</div>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-escudo"/></svg></div>
+        <h3>Sede / Catedral metropolitana</h3>
+        <p>La catedral de una arquidiócesis, cabeza de una provincia eclesiástica.</p>
+        <div class="rank-tag">Función · sede metropolitana</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Elaborado con fines ilustrativos y catequéticos · estructura simplificada de la organización canónica de la Iglesia Católica
+</footer>
+
+<script>
+  // Tabs
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabButtons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      panels.forEach(p=>p.classList.remove('active'));
+      document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Collapsible tree nodes
+  document.querySelectorAll('.tree li.has-children > .node .toggle').forEach(t=>{
+    t.addEventListener('click', (e)=>{
+      const li = e.target.closest('li');
+      li.classList.toggle('collapsed');
+    });
+  });
+</script>
+
+</body>
+</html>

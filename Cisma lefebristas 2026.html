@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Fraternidad San Pío X y la ruptura con Roma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#F1E9D6;
+    --parchment-card:#F8F2E3;
+    --ink:#2A2018;
+    --ink-soft:#5B4E3F;
+    --burgundy:#6E1F2E;
+    --burgundy-deep:#4C1420;
+    --gold:#B8863B;
+    --gold-light:#D9B978;
+    --sage:#4C5B3F;
+    --sage-deep:#37432D;
+    --line-gold:#C7A15C;
+    --line-sage:#8FA37A;
+    --indigo:#3B4C68;
+    --indigo-deep:#28374C;
+    --line-indigo:#8496AE;
+    --indigo-light:#B9C4D4;
+    --shadow: 0 1px 0 rgba(42,32,24,0.06), 0 6px 16px rgba(42,32,24,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at top left, rgba(184,134,59,0.10), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(76,91,63,0.08), transparent 55%),
+      var(--parchment);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(42,32,24,0.015) 0px, rgba(42,32,24,0.015) 1px, transparent 1px, transparent 3px);
+    z-index:0;
+  }
+
+  header{
+    position:relative; z-index:1; text-align:center;
+    padding:52px 24px 28px;
+    border-bottom:1px solid rgba(184,134,59,0.35);
+  }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:14px;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif; font-weight:700;
+    font-size:clamp(30px,4.6vw,52px);
+    margin:0 0 10px; color:var(--burgundy-deep); letter-spacing:.01em;
+  }
+  header p.sub{
+    max-width:660px; margin:0 auto; color:var(--ink-soft);
+    font-size:17px; font-style:italic; line-height:1.5;
+  }
+
+  .ornament{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    margin:20px auto 0; width:min(360px,80%);
+  }
+  .ornament .bar{ flex:1; height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent);}
+  .ornament svg{ width:20px; height:20px; color:var(--gold); flex-shrink:0;}
+
+  nav.tabs{
+    position:sticky; top:0; z-index:20;
+    display:flex; justify-content:center; flex-wrap:wrap; gap:6px;
+    padding:14px 16px;
+    background:rgba(241,233,214,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(184,134,59,0.3);
+  }
+  nav.tabs button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; letter-spacing:.05em; text-transform:uppercase;
+    padding:10px 14px; border-radius:3px;
+    border:1px solid rgba(110,31,46,0.25);
+    background:transparent; color:var(--ink-soft); cursor:pointer;
+    transition:all .18s ease;
+  }
+  nav.tabs button:hover{ border-color:var(--burgundy); color:var(--burgundy);}
+  nav.tabs button.active{ background:var(--burgundy); border-color:var(--burgundy); color:var(--parchment-card);}
+  nav.tabs button.active.sage{ background:var(--sage); border-color:var(--sage);}
+  nav.tabs button.active.indigo{ background:var(--indigo); border-color:var(--indigo);}
+
+  main{ position:relative; z-index:1; padding:36px 16px 90px; }
+  section.panel{ display:none; max-width:1200px; margin:0 auto; }
+  section.panel.active{ display:block; animation:fadein .35s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel-intro{ max-width:760px; margin:0 auto 30px; text-align:center; }
+  .panel-intro h2{ font-family:'Cormorant Garamond', serif; font-size:28px; color:var(--burgundy-deep); margin:0 0 8px; }
+  .panel-intro.sage h2{ color:var(--sage-deep); }
+  .panel-intro.indigo h2{ color:var(--indigo-deep); }
+  .panel-intro p{ color:var(--ink-soft); font-size:15.5px; line-height:1.55; margin:0;}
+
+  /* Temples/dignities grid, reused as generic card grid */
+  .dignity-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:18px; max-width:1100px; margin:0 auto;
+  }
+  .dignity-card{
+    background:var(--parchment-card);
+    border:1px solid rgba(184,134,59,0.35);
+    border-radius:4px; padding:20px 18px;
+    box-shadow:var(--shadow);
+  }
+  .dignity-card .icon-badge{ width:38px; height:38px; margin-bottom:12px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,var(--gold-light),var(--gold)); color:var(--burgundy-deep); }
+  .dignity-card .icon-badge svg{ width:19px; height:19px; }
+  .dignity-card h3{ font-family:'Cormorant Garamond', serif; font-size:19px; margin:0 0 6px; color:var(--burgundy-deep); }
+  .dignity-card p{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin:0; }
+  .dignity-card .rank-tag{
+    display:inline-block; margin-top:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.05em;
+    color:var(--gold); text-transform:uppercase;
+  }
+  .dignity-card.indigo{ border-color:rgba(59,76,104,0.35); }
+  .dignity-card.indigo h3{ color:var(--indigo-deep); }
+  .dignity-card.indigo .icon-badge{ background:linear-gradient(180deg,var(--indigo-light),var(--indigo)); color:var(--indigo-deep); }
+  .dignity-card.indigo .rank-tag{ color:var(--indigo); }
+  .dignity-card.sage{ border-color:rgba(76,91,63,0.35); }
+  .dignity-card.sage h3{ color:var(--sage-deep); }
+  .dignity-card.sage .icon-badge{ background:linear-gradient(180deg,#B7C6A6,var(--sage)); color:var(--sage-deep); }
+  .dignity-card.sage .rank-tag{ color:var(--sage); }
+
+  /* Timeline (reuses the degree-card language from the hierarchy app) */
+  .scroller{ overflow-x:auto; padding:10px 6px 30px; }
+  .scroller::-webkit-scrollbar{ height:10px; }
+  .scroller::-webkit-scrollbar-thumb{ background:var(--gold-light); border-radius:6px; }
+  .scroller::-webkit-scrollbar-track{ background:transparent; }
+
+  .degrees{
+    display:flex; flex-wrap:wrap; gap:26px; justify-content:center; align-items:stretch;
+    max-width:1150px; margin:0 auto;
+  }
+  .degree-card{
+    background:var(--parchment-card);
+    border:1px solid rgba(110,31,46,0.28);
+    border-radius:4px;
+    width:250px; padding:24px 18px;
+    text-align:center;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .degree-card .rank{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--gold);
+    letter-spacing:.14em; text-transform:uppercase; margin-bottom:10px;
+  }
+  .degree-card .icon-badge{ width:46px; height:46px; margin:0 auto 14px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .degree-card .icon-badge svg{ width:24px; height:24px; }
+  .degree-card h3{ font-family:'Cormorant Garamond', serif; font-size:20px; margin:0 0 8px; color:var(--burgundy-deep); }
+  .degree-card p{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin:0;}
+  .degree-arrow{ display:flex; align-items:center; color:var(--gold); }
+  .degree-arrow svg{ width:24px; height:24px; }
+  .degree-card.indigo{ border-color:rgba(59,76,104,0.35); }
+  .degree-card.indigo h3{ color:var(--indigo-deep); }
+  .degree-card.indigo .rank{ color:var(--indigo); }
+  .degree-arrow.indigo{ color:var(--indigo); }
+  .degree-card.sage{ border-color:rgba(76,91,63,0.35); }
+  .degree-card.sage h3{ color:var(--sage-deep); }
+  .degree-card.sage .rank{ color:var(--sage); }
+  .degree-arrow.sage{ color:var(--sage); }
+
+  /* Two-voice comparison layout */
+  .voices{
+    display:grid; grid-template-columns:1fr 1fr; gap:0;
+    max-width:1100px; margin:0 auto; border-radius:6px; overflow:hidden;
+    box-shadow:var(--shadow); border:1px solid rgba(110,31,46,0.2);
+  }
+  .voice-col{ padding:26px 24px; background:var(--parchment-card); }
+  .voice-col.roma{ border-right:1px solid rgba(184,134,59,0.35); }
+  .voice-col h3{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+    display:flex; align-items:center; gap:8px; margin:0 0 18px;
+  }
+  .voice-col.roma h3{ color:var(--burgundy-deep); }
+  .voice-col.fsspx h3{ color:var(--indigo-deep); }
+  .voice-col .icon-badge{ width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .voice-col.roma .icon-badge{ background:linear-gradient(180deg,var(--gold-light),var(--gold)); color:var(--burgundy-deep);}
+  .voice-col.fsspx .icon-badge{ background:linear-gradient(180deg,var(--indigo-light),var(--indigo)); color:var(--indigo-deep);}
+  .voice-col .icon-badge svg{ width:14px; height:14px; }
+  .voice-item{ margin-bottom:18px; padding-bottom:16px; border-bottom:1px dashed rgba(42,32,24,0.15); }
+  .voice-item:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  .voice-item .tag{ font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px; display:block;}
+  .voice-item p{ margin:0; font-size:14px; line-height:1.55; color:var(--ink);}
+  @media (max-width:760px){ .voices{ grid-template-columns:1fr; } .voice-col.roma{ border-right:none; border-bottom:1px solid rgba(184,134,59,0.35);} }
+
+  .note{
+    max-width:820px; margin:8px auto 0;
+    border-left:3px solid var(--gold);
+    background:rgba(184,134,59,0.08);
+    padding:14px 18px; font-size:13px; color:var(--ink-soft); line-height:1.55;
+    border-radius:0 4px 4px 0;
+  }
+  .note.indigo{ border-left-color:var(--indigo); background:rgba(59,76,104,0.08); }
+  .note strong{ color:var(--ink); }
+
+  footer{
+    text-align:center; padding:30px 20px 50px;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    color:var(--ink-soft); letter-spacing:.03em;
+    border-top:1px solid rgba(184,134,59,0.25);
+  }
+
+  @media (max-width:640px){
+    .degree-card{ width:100%; max-width:280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ ICON LIBRARY (mismo estilo de línea, stroke=currentColor) ============ -->
+<svg style="display:none">
+  <defs>
+    <!-- Concilio: libro abierto irradiando -->
+    <symbol id="ic-concilio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 6.5c-1.6-1.2-3.6-1.7-6-1.5v12c2.4-.2 4.4.3 6 1.5 1.6-1.2 3.6-1.7 6-1.5V5c-2.4-.2-4.4.3-6 1.5z"/>
+      <path d="M12 6.5V19"/>
+      <path d="M12 2.4v1.4M8.5 3l.6 1.3M15.5 3l-.6 1.3"/>
+    </symbol>
+    <!-- Fundacion: bandera plantada -->
+    <symbol id="ic-fundacion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 21V4"/>
+      <path d="M7 4l9 2.6L7 9.6"/>
+      <path d="M4.5 21h5"/>
+    </symbol>
+    <!-- Ruptura doctrinal: caminos que se separan -->
+    <symbol id="ic-bifurcacion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21V13"/>
+      <path d="M12 13c0-4 -4-5-6-8"/>
+      <path d="M12 13c0-4 4-5 6-8"/>
+      <circle cx="12" cy="21" r="1" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- Advertencia -->
+    <symbol id="ic-advertencia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3.5l9.3 16.2H2.7z"/>
+      <path d="M12 9.5v5M12 17.4v.2"/>
+    </symbol>
+    <!-- Carta / mensaje del Papa -->
+    <symbol id="ic-carta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="5.5" width="17" height="13" rx="1"/>
+      <path d="M4 6.5l8 6.5 8-6.5"/>
+    </symbol>
+    <!-- Consagracion: imposicion de manos -->
+    <symbol id="ic-consagracion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="6" r="2.2"/>
+      <path d="M4 13.5c.4-2.8 1.9-4.4 4-4.4s3.6 1.6 4 4.4"/>
+      <path d="M11 9.5l4-2M11.8 12l4.5-1.8"/>
+      <circle cx="17.5" cy="16.5" r="1.3"/>
+    </symbol>
+    <!-- Decreto: pergamino con sello -->
+    <symbol id="ic-decreto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 3.5h9l3 3V20a.7.7 0 01-.7.7H6.7A.7.7 0 016 20z"/>
+      <path d="M15 3.5V7h3"/>
+      <path d="M8.3 10h5.4M8.3 12.6h5.4"/>
+      <circle cx="10.5" cy="17" r="2.1"/>
+      <path d="M9.5 18.7L9 21l1.5-.8 1.5.8-.5-2.3"/>
+    </symbol>
+    <!-- Cisma: circulo partido -->
+    <symbol id="ic-cisma" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.5 4.5A7.5 7.5 0 1012 19.5"/>
+      <path d="M12 4.5c2.6 0 4.9 1.4 6.2 3.5"/>
+      <path d="M12 3v3.4M10.6 4l1.4 1.6 1.4-1.6"/>
+      <path d="M18.8 8.5l2.6-.6-1 2.5"/>
+    </symbol>
+    <!-- Canon / ley: balanza sencilla -->
+    <symbol id="ic-canon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v16"/>
+      <path d="M6 21h12"/>
+      <path d="M12 6l-5 1.2M12 6l5 1.2"/>
+      <path d="M3.5 8.4L7 7.2l3.5 1.2-3.5 5-3.5-5z"/>
+      <path d="M13.5 8.4L17 7.2l3.5 1.2-3.5 5-3.5-5z"/>
+    </symbol>
+    <!-- Sacramento invalido: caliz tachado -->
+    <symbol id="ic-sacramento" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 4h8l-1 5a3 3 0 01-6 0z"/>
+      <path d="M12 12v4M9 20h6M10.5 16h3"/>
+      <path d="M5 5l14 14" stroke-dasharray="1.5 1.8"/>
+    </symbol>
+    <!-- Fiel laico -->
+    <symbol id="ic-laico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="7" r="2.6"/>
+      <path d="M6 19.5c.4-4.3 2.7-6.8 6-6.8s5.6 2.5 6 6.8"/>
+    </symbol>
+    <!-- Calendario / hito temporal -->
+    <symbol id="ic-calendario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="5.5" width="16" height="14.5" rx="1"/>
+      <path d="M4 9.5h16M8 3.5v3.5M16 3.5v3.5"/>
+      <circle cx="12" cy="14" r="1.4" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- Interrogante glosario -->
+    <symbol id="ic-glosario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="M9.5 9.3c.3-1.5 1.5-2.3 2.7-2.3 1.4 0 2.6.9 2.6 2.3 0 1.7-2.6 2-2.6 4"/>
+      <circle cx="12" cy="16.2" r=".7" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- Comunion plena: dos anillos entrelazados -->
+    <symbol id="ic-comunion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="12" r="5.5"/>
+      <circle cx="15" cy="12" r="5.5"/>
+    </symbol>
+    <!-- Recurso / apelacion -->
+    <symbol id="ic-recurso" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12a8 8 0 1114.9 4"/>
+      <path d="M15 12.5l4 3.5-4 3.5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="kicker">Cisma · Excomunión · Derecho canónico</div>
+  <h1>La Fraternidad San Pío X y la ruptura con Roma</h1>
+  <p class="sub">Cómo, por qué y con qué argumentos la Santa Sede declara que los obispos, sacerdotes y fieles formalmente adheridos a la FSSPX están en cisma — de 1988 al decreto de 2026.</p>
+  <div class="ornament">
+    <span class="bar"></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2v20M4 8h16M6 5h12"/></svg>
+    <span class="bar"></span>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="origenes">Orígenes</button>
+  <button class="tab-btn" data-tab="cisma1988">Ruptura de 1988</button>
+  <button class="tab-btn indigo" data-tab="fundamento">Fundamento canónico</button>
+  <button class="tab-btn sage" data-tab="interludio">2009–2025</button>
+  <button class="tab-btn" data-tab="cisma2026">Ruptura de 2026</button>
+  <button class="tab-btn indigo" data-tab="dosvoces">Dos lecturas</button>
+  <button class="tab-btn indigo" data-tab="glosario">Estado actual</button>
+</nav>
+
+<main>
+
+  <!-- ================= PANEL: ORÍGENES ================= -->
+  <section class="panel active" id="panel-origenes">
+    <div class="panel-intro">
+      <h2>De la reacción al Concilio a una sociedad al margen de Roma</h2>
+      <p>La FSSPX no nace de una ruptura, sino de un desacuerdo con las reformas del Concilio Vaticano II. Ese desacuerdo, sostenido durante décadas sin resolverse, es el terreno sobre el que ocurren las dos rupturas formales de 1988 y 2026.</p>
+    </div>
+    <div class="dignity-grid">
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-concilio"/></svg></div>
+        <h3>Concilio Vaticano II (1962–1965)</h3>
+        <p>El Concilio reforma la liturgia, redefine la relación con otras religiones y con la libertad religiosa, y subraya la colegialidad de los obispos junto al Papa.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-fundacion"/></svg></div>
+        <h3>Fundación de la FSSPX (1970)</h3>
+        <p>El arzobispo Marcel Lefebvre funda en Friburgo (Suiza) la Fraternidad Sacerdotal San Pío X para formar sacerdotes en la liturgia y doctrina previas al Concilio.</p>
+        <div class="rank-tag">Aprobada primero, luego retirada</div>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-bifurcacion"/></svg></div>
+        <h3>Los puntos de ruptura doctrinal</h3>
+        <p>Rechazo o fuerte reserva ante la libertad religiosa, el ecumenismo, la colegialidad episcopal y la Misa reformada (Novus Ordo), que la FSSPX considera una ruptura con la Tradición.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-carta"/></svg></div>
+        <h3>Roma exige un mandato para ordenar</h3>
+        <p>Desde los años 70 la Santa Sede retira el reconocimiento canónico a la Fraternidad y advierte a Lefebvre que no puede consagrar obispos sin autorización papal expresa.</p>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Punto clave:</strong> hasta 1988, la FSSPX era una sociedad sin estatuto canónico pleno, pero no estaba formalmente en cisma. Lo que cambia el estatus es un acto concreto: consagrar obispos sin mandato del Papa.
+    </div>
+  </section>
+
+  <!-- ================= PANEL: RUPTURA DE 1988 ================= -->
+  <section class="panel" id="panel-cisma1988">
+    <div class="panel-intro">
+      <h2>1988: la primera excomunión</h2>
+      <p>Roma y Lefebvre negocian un acuerdo hasta el último momento. Cuando Lefebvre lo retracta y consagra obispos por su cuenta, la Santa Sede reacciona en menos de 48 horas.</p>
+    </div>
+    <div class="scroller">
+      <div class="degrees">
+        <div class="degree-card">
+          <div class="rank">5 de mayo, 1988</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-carta"/></svg></div>
+          <h3>Acuerdo firmado y retractado</h3>
+          <p>Lefebvre firma un protocolo con Roma que preveía un obispo para la FSSPX con mandato papal; al día siguiente retira su consentimiento.</p>
+        </div>
+        <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card">
+          <div class="rank">30 de junio, 1988</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-consagracion"/></svg></div>
+          <h3>Consagración sin mandato</h3>
+          <p>En Écône, Lefebvre y Mons. de Castro Mayer consagran a cuatro sacerdotes como obispos sin autorización del Papa Juan Pablo II.</p>
+        </div>
+        <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card">
+          <div class="rank">1 de julio, 1988</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-decreto"/></svg></div>
+          <h3>Decreto de excomunión</h3>
+          <p>El cardenal Gantin declara la excomunión latae sententiae (automática) de los seis obispos implicados, según el canon 1382.</p>
+        </div>
+        <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card">
+          <div class="rank">2 de julio, 1988</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-cisma"/></svg></div>
+          <h3>Ecclesia Dei adflicta</h3>
+          <p>Juan Pablo II confirma las excomuniones y califica el acto de "cismático": desobedecer al Papa en la consagración de obispos "implica en la práctica el rechazo del primado romano".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL: FUNDAMENTO CANÓNICO ================= -->
+  <section class="panel" id="panel-fundamento">
+    <div class="panel-intro indigo">
+      <h2>Los argumentos de Roma: por qué es cisma y no solo desobediencia</h2>
+      <p>La Santa Sede distingue entre una falta disciplinaria cualquiera y un acto que rompe la comunión jerárquica misma. Estos son los pilares canónicos y teológicos que sostiene.</p>
+    </div>
+    <div class="dignity-grid">
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-canon"/></svg></div>
+        <h3>Canon 1382 / 1387</h3>
+        <p>Consagrar un obispo sin mandato pontificio —y recibir esa consagración— acarrea excomunión automática (latae sententiae), reservada a la Santa Sede.</p>
+        <div class="rank-tag">Pena automática, sin juicio previo</div>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-cisma"/></svg></div>
+        <h3>Canon 1364: el delito de cisma</h3>
+        <p>El cisma se define como negar la sujeción al Papa o la comunión con los miembros de la Iglesia sujetos a él. Roma sostiene que consagrar obispos al margen del Papa, para perpetuar una jurisdicción paralela, constituye ese rechazo en los hechos.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-comunion"/></svg></div>
+        <h3>Comunión jerárquica</h3>
+        <p>Para la eclesiología católica, un obispo no solo necesita una consagración válida: necesita recibirla "dentro de la comunión jerárquica" garantizada por el sucesor de Pedro. Sin mandato papal, el gobierno de esos obispos no tiene fundamento legítimo, aunque el sacramento en sí sea válido.</p>
+        <div class="rank-tag">Válido, pero ilícito</div>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-consagracion"/></svg></div>
+        <h3>Unidad de la sucesión apostólica</h3>
+        <p>La sucesión apostólica no es solo una cadena de consagraciones: para Roma incluye la unidad de gobierno bajo el Papa. Multiplicar obispos sin ese vínculo, dice la Santa Sede, fragmenta la única sucesión en una paralela.</p>
+      </div>
+    </div>
+    <div class="note indigo">
+      <strong>Matiz importante:</strong> Roma nunca dijo que las consagraciones fueran sacramentalmente inválidas —los obispos de la FSSPX son obispos "de verdad" en cuanto al sacramento—. El problema que alega es de legitimidad y de comunión, no de validez del rito en sí.
+    </div>
+  </section>
+
+  <!-- ================= PANEL: 2009–2025 ================= -->
+  <section class="panel" id="panel-interludio">
+    <div class="panel-intro sage">
+      <h2>2009–2025: una mano tendida que no cierra la herida</h2>
+      <p>Durante quince años Roma intenta acercar a la FSSPX sin lograr una reincorporación plena. La distinción entre "levantar la excomunión" y "regularizar canónicamente" es la clave de este periodo.</p>
+    </div>
+    <div class="scroller">
+      <div class="degrees">
+        <div class="degree-card sage">
+          <div class="rank">21 de enero, 2009</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-decreto"/></svg></div>
+          <h3>Se levanta la excomunión de 1988</h3>
+          <p>Benedicto XVI retira el efecto jurídico del decreto de 1988 para los cuatro obispos consagrados por Lefebvre: Fellay, Galarreta, Tissier de Mallerais y Williamson.</p>
+        </div>
+        <div class="degree-arrow sage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card sage">
+          <div class="rank">2009 en adelante</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-glosario"/></svg></div>
+          <h3>Sin estatuto canónico pleno</h3>
+          <p>Levantar la excomunión de los obispos no regulariza a la Fraternidad: sigue sin misión canónica reconocida, y sus sacerdotes ordenan y confiesan en una zona de ambigüedad jurídica.</p>
+        </div>
+        <div class="degree-arrow sage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card sage">
+          <div class="rank">2015 – 2017</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-sacramento"/></svg></div>
+          <h3>Facultades supletorias parciales</h3>
+          <p>El Papa Francisco concede facultades para que las confesiones de la FSSPX sean válidas y permite a los obispos locales autorizar matrimonios, sin que ello implique reconocimiento canónico pleno de la Fraternidad.</p>
+        </div>
+        <div class="degree-arrow sage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card sage">
+          <div class="rank">2024 – 2025</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,#B7C6A6,var(--sage))"><svg><use href="#ic-calendario"/></svg></div>
+          <h3>Mueren dos de los obispos de 1988</h3>
+          <p>Tissier de Mallerais (2024) y Williamson (2025) fallecen. La FSSPX queda con solo dos obispos activos —Fellay y Galarreta— y sin un plan de sucesión reconocido por Roma.</p>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <strong>El nudo sin resolver:</strong> sin obispos propios reconocidos por el Papa, la FSSPX no tiene forma canónica de perpetuarse. Ese vacío de sucesión es lo que empuja a la Fraternidad, de nuevo, a consagrar obispos por su cuenta en 2026.
+    </div>
+  </section>
+
+  <!-- ================= PANEL: RUPTURA DE 2026 ================= -->
+  <section class="panel" id="panel-cisma2026">
+    <div class="panel-intro">
+      <h2>2026: la historia se repite, con una sanción más amplia</h2>
+      <p>Sin obispos que aseguren su continuidad, la FSSPX anuncia y ejecuta nuevas consagraciones episcopales. Roma responde con un decreto que va más allá de 1988.</p>
+    </div>
+    <div class="scroller">
+      <div class="degrees">
+        <div class="degree-card">
+          <div class="rank">18 de febrero, 2026</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-carta"/></svg></div>
+          <h3>La FSSPX anuncia consagraciones</h3>
+          <p>El superior general, P. Davide Pagliarani, comunica que la Fraternidad consagrará nuevos obispos el 1 de julio, tras estancarse el diálogo con el Dicasterio para la Doctrina de la Fe.</p>
+        </div>
+        <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card">
+          <div class="rank">30 de junio, 2026</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-advertencia"/></svg></div>
+          <h3>Ruego personal del Papa León XIV</h3>
+          <p>El Papa escribe directamente a la Fraternidad pidiéndole "con todo el corazón" dar marcha atrás, advirtiendo que el acto los privaría de la recepción lícita —y en algunos casos válida— de los sacramentos.</p>
+        </div>
+        <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card">
+          <div class="rank">1 de julio, 2026</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-consagracion"/></svg></div>
+          <h3>Cuatro nuevos obispos en Écône</h3>
+          <p>Ante unos 16.500 fieles, Galarreta (consagrante principal) y Fellay (co-consagrante) consagran a cuatro nuevos obispos, sin mandato pontificio y en contra de la voluntad expresa del Papa.</p>
+        </div>
+        <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card">
+          <div class="rank">2 de julio, 2026</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-decreto"/></svg></div>
+          <h3>Decreto del cardenal Fernández</h3>
+          <p>El Dicasterio para la Doctrina de la Fe declara la excomunión automática de los seis obispos implicados y, por primera vez, extiende la declaración de cisma a todo el clero de la FSSPX y a los fieles laicos formalmente adheridos.</p>
+        </div>
+        <div class="degree-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="degree-card">
+          <div class="rank">3 de julio, 2026 →</div>
+          <div class="icon-badge" style="background:linear-gradient(180deg,var(--gold-light),var(--gold))"><svg><use href="#ic-recurso"/></svg></div>
+          <h3>La FSSPX rechaza y apela</h3>
+          <p>La Fraternidad califica la sanción de "objetivamente injusta e inválida" y presenta un recurso canónico ante el mismo Dicasterio para suspender el decreto.</p>
+        </div>
+      </div>
+    </div>
+    <div class="dignity-grid" style="margin-top:44px;">
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-glosario"/></svg></div>
+        <h3>Qué añade el decreto de 2026</h3>
+        <p>No se limita a los seis obispos: declara en cisma a todos los sacerdotes de la Fraternidad y a los laicos que se adhieran formalmente a ella, algo que el decreto de 1988 no hacía de forma explícita para el clero en su conjunto.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-sacramento"/></svg></div>
+        <h3>Sacramentos declarados inválidos</h3>
+        <p>El Vaticano declara inválidas las confesiones y los matrimonios administrados por sacerdotes de la FSSPX, revirtiendo en la práctica el efecto de las facultades supletorias concedidas entre 2015 y 2017.</p>
+      </div>
+      <div class="dignity-card">
+        <div class="icon-badge"><svg><use href="#ic-laico"/></svg></div>
+        <h3>Advertencia a los fieles</h3>
+        <p>El decreto avisa a sacerdotes y laicos que la adhesión formal a la FSSPX —no la simple asistencia ocasional a su misa— puede implicar incurrir también en la pena de excomunión.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL: DOS LECTURAS ================= -->
+  <section class="panel" id="panel-dosvoces">
+    <div class="panel-intro indigo">
+      <h2>Dos lecturas de un mismo hecho</h2>
+      <p>Roma y la FSSPX describen las consagraciones de 1988 y 2026 en términos opuestos. Conocer ambos argumentos —sin igualarlos en autoridad canónica— ayuda a entender por qué el conflicto no se ha cerrado.</p>
+    </div>
+    <div class="voices">
+      <div class="voice-col roma">
+        <h3><span class="icon-badge"><svg><use href="#ic-decreto"/></svg></span> Lo que sostiene Roma</h3>
+        <div class="voice-item">
+          <span class="tag">Sobre la desobediencia</span>
+          <p>Consagrar obispos sin mandato papal, dos veces, en contra de un ruego directo del Papa, no es un desacuerdo disciplinario menor: es rechazar en los hechos la autoridad del sucesor de Pedro sobre el propio gobierno episcopal.</p>
+        </div>
+        <div class="voice-item">
+          <span class="tag">Sobre la "necesidad"</span>
+          <p>La Fraternidad no está perseguida ni impedida de practicar su fe: Roma ofreció explícitamente diálogo teológico estructurado antes de julio de 2026. La "necesidad de sobrevivir" que alega la FSSPX no encaja, para el Vaticano, en las causas que eximen de pena en derecho canónico.</p>
+        </div>
+        <div class="voice-item">
+          <span class="tag">Sobre por qué ahora es más amplio</span>
+          <p>La repetición del acto en 2026, después de que en 2009 se les tendiera una salida sin condiciones dogmáticas, muestra —según el Dicasterio— una voluntad estable de mantener una jurisdicción paralela, lo que justifica extender la declaración de cisma más allá de los seis obispos.</p>
+        </div>
+      </div>
+      <div class="voice-col fsspx">
+        <h3><span class="icon-badge"><svg><use href="#ic-recurso"/></svg></span> Lo que responde la FSSPX</h3>
+        <div class="voice-item">
+          <span class="tag">Sobre el cisma</span>
+          <p>La Fraternidad niega tener intención cismática: sostiene que nunca pretendió transferir potestad de gobierno a los obispos consagrados ni crear una jerarquía paralela, y que obedece al Papa en todo lo que —a su juicio— es conforme a la fe y la moral de siempre.</p>
+        </div>
+        <div class="voice-item">
+          <span class="tag">Sobre la "necesidad"</span>
+          <p>Alega un estado de necesidad: sin obispos propios no puede ordenar sacerdotes ni confirmar, y considera que asegurar la continuidad de la Misa tradicional y su formación sacerdotal justifica actuar sin mandato papal.</p>
+        </div>
+        <div class="voice-item">
+          <span class="tag">Sobre la validez de la pena</span>
+          <p>Cuestiona jurídicamente el decreto de 2026: argumenta que la presentación de un recurso canónico suspende automáticamente sus efectos, y señala una contradicción en que Roma vuelva a declarar "cisma" en 2026 sobre una sociedad que, según ellos, ya habría sido declarada cismática —y por tanto ya fuera— desde 1988.</p>
+        </div>
+      </div>
+    </div>
+    <div class="note indigo">
+      Esta comparación no busca dar el mismo peso doctrinal a ambas posiciones —la autoridad para declarar el cisma corresponde al Magisterio de la Iglesia, no a la Fraternidad— sino mostrar los argumentos que cada parte hace públicos, para entender el conflicto tal como se está discutiendo hoy.
+    </div>
+  </section>
+
+  <!-- ================= PANEL: ESTADO ACTUAL / GLOSARIO ================= -->
+  <section class="panel" id="panel-glosario">
+    <div class="panel-intro indigo">
+      <h2>Glosario y estado actual del conflicto</h2>
+      <p>Los términos que se usan casi como sinónimos en la prensa tienen significados canónicos distintos. Distinguirlos explica por qué la FSSPX "no está en comunión con Roma" incluso en los años en que no hubo excomuniones vigentes.</p>
+    </div>
+    <div class="dignity-grid">
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-cisma"/></svg></div>
+        <h3>Cisma</h3>
+        <p>Negarse a la sujeción al Papa o a la comunión con los miembros de la Iglesia sometidos a él (canon 1364). Es una calificación del acto, declarada por la autoridad competente.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-decreto"/></svg></div>
+        <h3>Excomunión "latae sententiae"</h3>
+        <p>Pena automática: se incurre en ella en el mismo momento de cometer el acto tipificado por la ley, sin necesidad de un juicio previo —aunque sí de una declaración que la constate formalmente.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-comunion"/></svg></div>
+        <h3>Comunión plena</h3>
+        <p>Estar en comunión plena implica compartir la misma fe, los mismos sacramentos y el mismo gobierno bajo el Papa y los obispos en comunión con él. Es distinto de "no estar excomulgado".</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-glosario"/></svg></div>
+        <h3>Estatuto canónico irregular</h3>
+        <p>La situación de la FSSPX entre 2009 y 2026: sin excomunión vigente para sus obispos originales, pero también sin reconocimiento como instituto ni misión canónica propia dentro de la Iglesia.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-recurso"/></svg></div>
+        <h3>Recurso canónico</h3>
+        <p>Vía prevista en derecho para impugnar un decreto ante la autoridad que lo emitió o una superior. La FSSPX presentó uno en julio de 2026 contra el decreto de excomunión, aún sin resolución pública.</p>
+      </div>
+      <div class="dignity-card indigo">
+        <div class="icon-badge"><svg><use href="#ic-laico"/></svg></div>
+        <h3>Adhesión formal</h3>
+        <p>Roma distingue entre asistir ocasionalmente a una misa de la FSSPX y adherirse formalmente a ella. Solo la segunda situación es la que el decreto de 2026 vincula a la excomunión de un fiel laico.</p>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Situación al cierre de esta presentación (julio de 2026):</strong> los seis obispos consagrantes y consagrados de 2026, así como el clero de la FSSPX y quienes se adhieren formalmente a ella, están declarados en cisma por el Dicasterio para la Doctrina de la Fe. La Fraternidad ha apelado esa decisión y la disputa canónica sigue abierta.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Elaborado con fines informativos y catequéticos · presenta la posición oficial de la Santa Sede y, para contraste, los argumentos públicos de la FSSPX · información al 18 de julio de 2026
+</footer>
+
+<script>
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabButtons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      panels.forEach(p=>p.classList.remove('active'));
+      document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
