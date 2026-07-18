@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jerarquía y Organización de la Iglesia Católica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vatican-gold': '#F1C40F',
+                        'vatican-yellow': '#FFE600',
+                        'cardinal-red': '#C8102E',
+                        'bishop-purple': '#800080',
+                        'church-blue': '#2C3E50',
+                        'parchment': '#FDFBF7',
+                        'ink': '#2c2c2c'
+                    },
+                    fontFamily: {
+                        'serif': ['Cinzel', 'serif'],
+                        'sans': ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FDFBF7;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='#e0dcd3' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            color: #2c2c2c;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* D3 will handle panning/zooming */
+        }
+        
+        #chart-container {
+            width: 100vw;
+            height: 100vh;
+            cursor: grab;
+        }
+
+        #chart-container:active {
+            cursor: grabbing;
+        }
+
+        /* D3 SVG Styles */
+        .node circle {
+            fill: #fff;
+            stroke-width: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .node:hover circle {
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2));
+            transform: scale(1.1);
+        }
+
+        .node text {
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            pointer-events: none;
+        }
+        
+        .node .title {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .link {
+            fill: none;
+            stroke: #cbd5e1;
+            stroke-width: 2px;
+            opacity: 0.7;
+            transition: stroke 0.3s;
+        }
+
+        .node:hover ~ .link {
+            stroke: #94a3b8;
+        }
+
+        /* Tooltip */
+        #tooltip {
+            position: absolute;
+            background: white;
+            border-left: 4px solid #C8102E;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            max-width: 300px;
+            z-index: 50;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .tooltip-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            color: #C8102E;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .btn-control {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            transition: all 0.2s;
+        }
+        .btn-control:hover {
+            background-color: #f8fafc;
+            color: #0f172a;
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        /* Modal for initial explanation */
+        #welcome-modal {
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- UI Overlay -->
+    <div class="absolute top-0 left-0 w-full p-4 flex justify-between items-start pointer-events-none z-10">
+        <div class="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-slate-200 pointer-events-auto max-w-sm">
+            <h1 class="font-serif text-2xl font-bold text-cardinal-red mb-1">Estructura de la Iglesia</h1>
+            <p class="text-xs text-slate-600 mb-3">Mapa interactivo de la organización territorial y consagrada.</p>
+            <div class="flex gap-2">
+                <button onclick="zoomIn()" class="btn-control w-10 h-10 rounded-lg flex items-center justify-center" title="Acercar">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button onclick="zoomOut()" class="btn-control w-10 h-10 rounded-lg flex items-center justify-center" title="Alejar">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button onclick="resetZoom()" class="btn-control w-10 h-10 rounded-lg flex items-center justify-center" title="Centrar">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button onclick="toggleAll()" class="btn-control px-3 h-10 rounded-lg flex items-center justify-center text-sm font-semibold" title="Expandir/Contraer Todo">
+                    <i class="fas fa-sitemap mr-2"></i> Expandir
+                </button>
+            </div>
+            <div class="mt-4 text-xs text-slate-500">
+                <p><i class="fas fa-mouse-pointer mr-1"></i> <b>Clic</b> en los nodos para expandir/contraer.</p>
+                <p><i class="fas fa-hand-paper mr-1"></i> <b>Arrastra</b> para mover el mapa.</p>
+                <p><i class="fas fa-info-circle mr-1"></i> <b>Pasa el cursor</b> para ver detalles.</p>
+            </div>
+        </div>
+
+        <div class="bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-slate-200 pointer-events-auto">
+            <h3 class="font-serif font-bold text-sm mb-2 text-slate-700 border-b pb-1">Leyenda de Colores</h3>
+            <ul class="text-xs space-y-1">
+                <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-yellow-400 mr-2 border border-slate-300"></span> Santa Sede / Papa</li>
+                <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-600 mr-2 border border-slate-300"></span> Cardenales</li>
+                <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-purple-700 mr-2 border border-slate-300"></span> Obispos / Patriarcas</li>
+                <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-600 mr-2 border border-slate-300"></span> Clero / Parroquias</li>
+                <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-600 mr-2 border border-slate-300"></span> Vida Consagrada</li>
+                <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-amber-700 mr-2 border border-slate-300"></span> Tipos de Templos</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div id="tooltip">
+        <div class="tooltip-title" id="tt-title">Título</div>
+        <div class="text-sm text-slate-700" id="tt-desc">Descripción</div>
+    </div>
+
+    <!-- D3 Container -->
+    <div id="chart-container"></div>
+
+    <script>
+        // Data Structure encompassing the complex hierarchy
+        const treeData = {
+            name: "El Papa",
+            title: "Sumo Pontífice",
+            type: "pope",
+            icon: "\uf19c", // fa-university as placeholder for vatican
+            desc: "Obispo de Roma, Vicario de Cristo y Pastor de la Iglesia Universal. Posee autoridad suprema, plena, inmediata y universal.",
+            children: [
+                {
+                    name: "Colegio Cardenalicio",
+                    title: "Cardenales",
+                    type: "cardinal",
+                    icon: "\uf0c0", // users
+                    desc: "Principal órgano asesor del Papa. Su función principal es elegir al nuevo Papa en cónclave. Son obispos con este título honorífico.",
+                    children: [
+                        { name: "Curia Romana", title: "Dicasterios", type: "cardinal", desc: "El aparato administrativo de la Santa Sede a través del cual el Papa dirige la Iglesia universal." }
+                    ]
+                },
+                {
+                    name: "Iglesias Orientales",
+                    title: "Patriarcas",
+                    type: "bishop",
+                    icon: "\uf67f", // place-of-worship
+                    desc: "Iglesias católicas de rito oriental en plena comunión con Roma, gobernadas por Patriarcas o Arzobispos Mayores (ej. Maronitas, Melquitas).",
+                    children: [
+                        { name: "Eparquías", title: "Diócesis Orientales", type: "bishop", desc: "Equivalente a las diócesis en las iglesias orientales." }
+                    ]
+                },
+                {
+                    name: "Jerarquía Territorial",
+                    title: "Orden Clerical",
+                    type: "main",
+                    icon: "\uf0ac", // globe
+                    desc: "Organización geográfica y pastoral de la Iglesia en todo el mundo.",
+                    children: [
+                        {
+                            name: "Provincia Eclesiástica",
+                            title: "Arquidiócesis Metropolitana",
+                            type: "bishop",
+                            icon: "\uf518", // cross
+                            desc: "Agrupación de varias diócesis bajo el liderazgo honorífico y de coordinación de un Arzobispo Metropolitano.",
+                            children: [
+                                {
+                                    name: "Diócesis (Iglesia Particular)",
+                                    title: "Obispos",
+                                    type: "bishop",
+                                    icon: "\uf518", // cross
+                                    desc: "Porción del pueblo de Dios confiada a un Obispo. Es la unidad organizativa fundamental de la Iglesia.",
+                                    children: [
+                                        {
+                                            name: "Catedral",
+                                            title: "Sede del Obispo",
+                                            type: "temple",
+                                            icon: "\uf66f", // gopuram / temple
+                                            desc: "Iglesia principal de la diócesis donde se encuentra la 'cátedra' (silla) del obispo desde donde enseña."
+                                        },
+                                        {
+                                            name: "Basílica",
+                                            title: "Título Honorífico",
+                                            type: "temple",
+                                            icon: "\uf66f",
+                                            desc: "Título otorgado por el Papa a un templo por su importancia histórica, espiritual o arquitectónica."
+                                        },
+                                        {
+                                            name: "Santuario",
+                                            title: "Lugar de Peregrinación",
+                                            type: "temple",
+                                            icon: "\uf67f",
+                                            desc: "Templo o lugar sagrado al que acuden numerosos peregrinos por devoción, a menudo alberga reliquias."
+                                        },
+                                        {
+                                            name: "Arciprestazgos / Decanatos",
+                                            title: "Agrupación de Parroquias",
+                                            type: "priest",
+                                            icon: "\uf0e8", // sitemap
+                                            desc: "Conjunto de parroquias vecinas unidas para facilitar el trabajo pastoral común.",
+                                            children: [
+                                                {
+                                                    name: "Parroquia",
+                                                    title: "Párrocos (Presbíteros)",
+                                                    type: "priest",
+                                                    icon: "\uf015", // home / church
+                                                    desc: "Comunidad de fieles constituida de modo estable. A cargo de un Sacerdote (Párroco).",
+                                                    children: [
+                                                        {
+                                                            name: "Vicarios Parroquiales",
+                                                            title: "Sacerdotes asistentes",
+                                                            type: "priest",
+                                                            desc: "Sacerdotes que ayudan al párroco en el cuidado de la parroquia."
+                                                        },
+                                                        {
+                                                            name: "Capillas / Ermitas",
+                                                            title: "Lugares de Culto Menores",
+                                                            type: "temple",
+                                                            icon: "\uf67f",
+                                                            desc: "Lugar sagrado para un grupo reducido o alejado. Ermitas suelen estar en despoblados."
+                                                        },
+                                                        {
+                                                            name: "Diáconos",
+                                                            title: "Ordenados para el Servicio",
+                                                            type: "priest",
+                                                            icon: "\uf4c4", // hands-helping
+                                                            desc: "Tercer grado del Orden. Pueden bautizar y casar, pero no consagrar ni confesar. (Transitorios y Permanentes).",
+                                                            children: [
+                                                                { name: "Transitorios", title: "Camino al sacerdocio", type: "priest", desc: "Hombres ordenados diáconos como paso previo a ser sacerdotes." },
+                                                                { name: "Permanentes", title: "Servicio estable", type: "priest", desc: "Hombres (incluso casados) ordenados para servir permanentemente como diáconos." }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "Vida Consagrada",
+                    title: "Consagrados a Dios",
+                    type: "consecrated",
+                    icon: "\uf4be", // pray
+                    desc: "Fieles (laicos o clérigos) que profesan los consejos evangélicos (pobreza, castidad, obediencia).",
+                    children: [
+                        {
+                            name: "Órdenes Religiosas",
+                            title: "Votos Solemnes",
+                            type: "consecrated",
+                            icon: "\uf518",
+                            desc: "Las más antiguas. Realizan votos solemnes. Suelen tener un carácter más contemplativo o mendicante.",
+                            children: [
+                                {
+                                    name: "Monásticas",
+                                    title: "Monjes y Monjas",
+                                    type: "consecrated",
+                                    desc: "Viven en Monasterios o Abadías (dirigidos por un Abad/Abadesa). Centrados en oración y trabajo (clausura). Ej: Benedictinos, Cartujos."
+                                },
+                                {
+                                    name: "Mendicantes",
+                                    title: "Frailes y Hermanas",
+                                    type: "consecrated",
+                                    desc: "Viven en Conventos. Combinan oración con vida activa en el mundo (predicación, caridad). Ej: Franciscanos, Dominicos."
+                                },
+                                {
+                                    name: "Clérigos Regulares",
+                                    title: "Sacerdotes con Regla",
+                                    type: "consecrated",
+                                    desc: "Sacerdotes que hacen votos religiosos y viven en comunidad para un apostolado activo. Ej: Jesuitas, Escolapios."
+                                }
+                            ]
+                        },
+                        {
+                            name: "Congregaciones Religiosas",
+                            title: "Votos Simples",
+                            type: "consecrated",
+                            icon: "\uf4c4",
+                            desc: "Surgidas más recientemente (s. XVI en adelante). Votos simples. Orientadas fuertemente a la acción misionera, educativa o caritativa. Ej: Salesianos, Misioneras de la Caridad."
+                        },
+                        {
+                            name: "Institutos Seculares",
+                            title: "Consagración en el Mundo",
+                            type: "consecrated",
+                            icon: "\uf0b1", // briefcase
+                            desc: "Viven la consagración a Dios en medio de la sociedad, trabajando en profesiones civiles, sin usar hábito ni vivir necesariamente en comunidad."
+                        },
+                        {
+                            name: "Sociedades de Vida Apostólica",
+                            title: "Vida en Común",
+                            type: "consecrated",
+                            icon: "\uf0c0",
+                            desc: "Hombres o mujeres que viven en común persiguiendo un fin apostólico, pero sin hacer votos religiosos públicos (o los hacen de forma privada). Ej: Hijas de la Caridad."
+                        },
+                        {
+                            name: "Formas Individuales",
+                            title: "Eremitas y Vírgenes",
+                            type: "consecrated",
+                            icon: "\uf183", // user
+                            desc: "Ermitaños (vida solitaria de oración estricta) y el Orden de las Vírgenes consagradas."
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Configuration
+        const margin = {top: 20, right: 90, bottom: 30, left: 90};
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        let svg, g, root, treemap, duration = 750, i = 0;
+        let zoom;
+        let isExpanded = false;
+
+        // Color mapping
+        const colorMap = {
+            'pope': { fill: '#F1C40F', stroke: '#B7950B', text: '#2c2c2c' }, // Yellow/Gold
+            'cardinal': { fill: '#C8102E', stroke: '#900C3F', text: '#fff' }, // Red
+            'bishop': { fill: '#800080', stroke: '#4A235A', text: '#fff' }, // Purple
+            'main': { fill: '#34495E', stroke: '#2C3E50', text: '#fff' }, // Dark grey
+            'priest': { fill: '#2980B9', stroke: '#1A5276', text: '#fff' }, // Blue
+            'consecrated': { fill: '#27AE60', stroke: '#196F3D', text: '#fff' }, // Green
+            'temple': { fill: '#D35400', stroke: '#A04000', text: '#fff' }, // Bronze/Orange
+            'default': { fill: '#fff', stroke: '#ccc', text: '#333' }
+        };
+
+        function initD3() {
+            // Append SVG object to body
+            svg = d3.select("#chart-container").append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .attr("preserveAspectRatio", "xMidYMid meet");
+            
+            g = svg.append("g")
+                .attr("transform", "translate(" + width / 4 + "," + margin.top + ")"); // Start a bit shifted to right
+
+            // Zoom behavior
+            zoom = d3.zoom()
+                .scaleExtent([0.2, 3])
+                .on("zoom", (event) => {
+                    g.attr("transform", event.transform);
+                });
+            
+            svg.call(zoom);
+
+            // declares a tree layout and assigns the size
+            treemap = d3.tree().nodeSize([60, 280]); // Height spacing, Width spacing
+
+            // Assigns parent, children, height, depth
+            root = d3.hierarchy(treeData, function(d) { return d.children; });
+            root.x0 = height / 2;
+            root.y0 = 0;
+
+            // Collapse after the second level initially to keep it clean
+            root.children.forEach(collapseLevel);
+
+            update(root);
+            
+            // Center the root node initially
+            setTimeout(() => {
+                const initialScale = 0.8;
+                const tx = (width / 2) - (root.y0 * initialScale) - 100; // Offset slightly left
+                const ty = (height / 2) - (root.x0 * initialScale);
+                svg.transition().duration(1000).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(initialScale));
+            }, 100);
+        }
+
+        function collapseLevel(d) {
+            if (d.children) {
+                // Keep the first level open, collapse the rest
+                d._children = d.children;
+                d._children.forEach(collapseAll);
+                d.children = null;
+            }
+        }
+
+        function collapseAll(d) {
+            if(d.children) {
+                d._children = d.children
+                d._children.forEach(collapseAll)
+                d.children = null
+            }
+        }
+
+        function expandAll(d) {
+            if (d._children) {
+                d.children = d._children;
+                d._children = null;
+            }
+            if (d.children) {
+                d.children.forEach(expandAll);
+            }
+        }
+
+        function update(source) {
+            // Assigns the x and y position for the nodes
+            const treeData = treemap(root);
+
+            // Compute the new tree layout.
+            const nodes = treeData.descendants(),
+                  links = treeData.descendants().slice(1);
+
+            // Normalize for fixed-depth.
+            nodes.forEach(function(d){ d.y = d.depth * 280});
+
+            // ****************** Nodes section ***************************
+
+            // Update the nodes...
+            const node = g.selectAll('g.node')
+                .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+            // Enter any new modes at the parent's previous position.
+            const nodeEnter = node.enter().append('g')
+                .attr('class', 'node')
+                .attr("transform", function(d) {
+                    return "translate(" + source.y0 + "," + source.x0 + ")";
+                })
+                .on('click', click)
+                .on('mouseover', showTooltip)
+                .on('mouseout', hideTooltip);
+
+            // Add Circle for the nodes
+            nodeEnter.append('circle')
+                .attr('class', 'node')
+                .attr('r', 1e-6)
+                .style("fill", function(d) {
+                    const colors = colorMap[d.data.type] || colorMap['default'];
+                    return d._children ? colors.stroke : colors.fill; // Filled if collapsed, open if expanded
+                })
+                .style("stroke", function(d) {
+                     const colors = colorMap[d.data.type] || colorMap['default'];
+                     return colors.stroke;
+                });
+
+            // Add Icon inside circle (using FontAwesome unicode)
+            nodeEnter.append('text')
+                .attr('class', 'icon')
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "central")
+                .style("font-family", "'Font Awesome 6 Free'")
+                .style("font-weight", "900")
+                .style("font-size", "14px")
+                .style("fill", function(d) {
+                    const colors = colorMap[d.data.type] || colorMap['default'];
+                    return d._children ? "#fff" : colors.stroke; // Contrast color based on fill
+                })
+                .text(function(d) { return d.data.icon || ''; });
+
+            // Add labels for the nodes (Name)
+            nodeEnter.append('text')
+                .attr("dy", "-.35em")
+                .attr("x", function(d) {
+                    return d.children || d._children ? -25 : 25;
+                })
+                .attr("text-anchor", function(d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function(d) { return d.data.name; })
+                .style("fill", "#1e293b")
+                .style("font-weight", "700")
+                .style("font-family", "'Cinzel', serif");
+
+            // Add Sub-labels (Title/Role)
+            nodeEnter.append('text')
+                .attr("dy", "1.1em")
+                .attr("x", function(d) {
+                    return d.children || d._children ? -25 : 25;
+                })
+                .attr("text-anchor", function(d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function(d) { return d.data.title; })
+                .style("fill", "#64748b")
+                .style("font-size", "12px");
+                
+            // Children Indicator (little plus sign if collapsed)
+            nodeEnter.append('text')
+                .attr('class', 'indicator')
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "central")
+                .attr("x", 20)
+                .attr("y", 0)
+                .style("font-family", "'Font Awesome 6 Free'")
+                .style("font-weight", "900")
+                .style("font-size", "10px")
+                .style("fill", "#94a3b8")
+                .text(function(d) { return d._children ? "\uf055" : ""; }); // fa-plus-circle
+
+            // UPDATE
+            const nodeUpdate = nodeEnter.merge(node);
+
+            // Transition to the proper position for the node
+            nodeUpdate.transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + d.y + "," + d.x + ")";
+                });
+
+            // Update the node attributes and style
+            nodeUpdate.select('circle.node')
+                .attr('r', 18)
+                .style("fill", function(d) {
+                    const colors = colorMap[d.data.type] || colorMap['default'];
+                    // If it has hidden children, fill it with stroke color to indicate it's closed
+                    return d._children ? colors.stroke : colors.fill;
+                })
+                .attr('cursor', function(d) { return (d.children || d._children) ? 'pointer' : 'default'; });
+                
+            // Update icon color based on filled state
+            nodeUpdate.select('text.icon')
+                .style("fill", function(d) {
+                    const colors = colorMap[d.data.type] || colorMap['default'];
+                    return d._children ? "#fff" : (colors.text === '#fff' ? '#fff' : colors.stroke);
+                });
+
+            nodeUpdate.select('text.indicator')
+                .text(function(d) { return d._children ? "\uf055" : ""; });
+
+            // Remove any exiting nodes
+            const nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + source.y + "," + source.x + ")";
+                })
+                .remove();
+
+            nodeExit.select('circle')
+                .attr('r', 1e-6);
+
+            nodeExit.select('text')
+                .style('fill-opacity', 1e-6);
+
+            // ****************** links section ***************************
+
+            // Update the links...
+            const link = g.selectAll('path.link')
+                .data(links, function(d) { return d.id; });
+
+            // Enter any new links at the parent's previous position.
+            const linkEnter = link.enter().insert('path', "g")
+                .attr("class", "link")
+                .attr('d', function(d){
+                    const o = {x: source.x0, y: source.y0}
+                    return diagonal(o, o)
+                });
+
+            // UPDATE
+            const linkUpdate = linkEnter.merge(link);
+
+            // Transition back to the parent element coordinate
+            linkUpdate.transition()
+                .duration(duration)
+                .attr('d', function(d){ return diagonal(d, d.parent) })
+                .style("stroke", function(d) {
+                     // Color link based on child node type
+                     const colors = colorMap[d.data.type] || colorMap['default'];
+                     return d.data.type === 'pope' ? '#cbd5e1' : colors.stroke;
+                })
+                .style("opacity", 0.4);
+
+            // Remove any exiting links
+            const linkExit = link.exit().transition()
+                .duration(duration)
+                .attr('d', function(d) {
+                    const o = {x: source.x, y: source.y}
+                    return diagonal(o, o)
+                })
+                .remove();
+
+            // Store the old positions for transition.
+            nodes.forEach(function(d){
+                d.x0 = d.x;
+                d.y0 = d.y;
+            });
+        }
+
+        // Creates a curved (diagonal) path from parent to the child nodes
+        function diagonal(s, d) {
+            // Elegant smooth curve
+            const path = `M ${s.y} ${s.x}
+                    C ${(s.y + d.y) / 2} ${s.x},
+                      ${(s.y + d.y) / 2} ${d.x},
+                      ${d.y} ${d.x}`
+            return path;
+        }
+
+        // Toggle children on click.
+        function click(event, d) {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            update(d);
+            
+            // Re-center slightly on the clicked node
+            const currentTransform = d3.zoomTransform(svg.node());
+            const tx = (width / 2) - (d.y * currentTransform.k);
+            const ty = (height / 2) - (d.x * currentTransform.k);
+            
+            // Only animate pan if it's a deep node to avoid jumpiness on root nodes
+            if(d.depth > 0) {
+                 svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(currentTransform.k));
+            }
+        }
+
+        // Tooltip logic
+        const tooltip = document.getElementById('tooltip');
+        const ttTitle = document.getElementById('tt-title');
+        const ttDesc = document.getElementById('tt-desc');
+
+        function showTooltip(event, d) {
+            if(!d.data.desc) return;
+            
+            const colors = colorMap[d.data.type] || colorMap['default'];
+            tooltip.style.borderLeftColor = colors.stroke;
+            ttTitle.style.color = colors.stroke;
+            
+            ttTitle.textContent = d.data.name;
+            ttDesc.textContent = d.data.desc;
+            
+            tooltip.style.opacity = '1';
+            
+            // Position near cursor but keep on screen
+            let x = event.pageX + 15;
+            let y = event.pageY + 15;
+            
+            const ttRect = tooltip.getBoundingClientRect();
+            if (x + ttRect.width > window.innerWidth) x = event.pageX - ttRect.width - 15;
+            if (y + ttRect.height > window.innerHeight) y = event.pageY - ttRect.height - 15;
+
+            tooltip.style.left = x + 'px';
+            tooltip.style.top = y + 'px';
+        }
+
+        function hideTooltip() {
+            tooltip.style.opacity = '0';
+        }
+
+        // UI Controls
+        function zoomIn() {
+            svg.transition().duration(300).call(zoom.scaleBy, 1.3);
+        }
+
+        function zoomOut() {
+            svg.transition().duration(300).call(zoom.scaleBy, 0.7);
+        }
+
+        function resetZoom() {
+            const initialScale = 0.8;
+            const tx = (width / 2) - (root.y0 * initialScale) - 100; 
+            const ty = (height / 2) - (root.x0 * initialScale);
+            svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(initialScale));
+        }
+
+        function toggleAll() {
+            const btn = document.querySelector('button[onclick="toggleAll()"]');
+            if (isExpanded) {
+                // Collapse all except root children
+                root.children.forEach(collapseAll);
+                update(root);
+                btn.innerHTML = '<i class="fas fa-sitemap mr-2"></i> Expandir';
+                isExpanded = false;
+            } else {
+                // Expand all
+                expandAll(root);
+                update(root);
+                btn.innerHTML = '<i class="fas fa-compress mr-2"></i> Contraer';
+                isExpanded = true;
+            }
+            resetZoom();
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            initD3();
+        };
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            svg.attr("width", window.innerWidth).attr("height", window.innerHeight);
+        });
+
+    </script>
+</body>
+</html>
